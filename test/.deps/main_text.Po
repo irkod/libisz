@@ -1,0 +1,172 @@
+main_text.o: main_text.c /usr/include/stdc-predef.h /usr/include/stdio.h \
+ /usr/include/features.h /usr/include/sys/cdefs.h \
+ /usr/include/bits/wordsize.h /usr/include/gnu/stubs.h \
+ /usr/include/gnu/stubs-64.h \
+ /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stddef.h \
+ /usr/include/bits/types.h /usr/include/bits/typesizes.h \
+ /usr/include/libio.h /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stdarg.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+ /usr/include/bits/stdio.h /usr/include/malloc.h /usr/include/string.h \
+ /usr/include/xlocale.h /usr/include/bits/string.h \
+ /usr/include/bits/string2.h /usr/include/endian.h \
+ /usr/include/bits/endian.h /usr/include/bits/byteswap.h \
+ /usr/include/bits/byteswap-16.h /usr/include/stdlib.h \
+ /usr/include/bits/wchar.h /usr/include/bits/waitflags.h \
+ /usr/include/bits/waitstatus.h /usr/include/sys/types.h \
+ /usr/include/time.h /usr/include/sys/select.h /usr/include/bits/select.h \
+ /usr/include/bits/sigset.h /usr/include/bits/time.h \
+ /usr/include/sys/sysmacros.h /usr/include/bits/pthreadtypes.h \
+ /usr/include/alloca.h /usr/include/bits/stdlib-bsearch.h \
+ /usr/include/bits/stdlib-float.h /usr/include/locale.h \
+ /usr/include/bits/locale.h /usr/include/assert.h ../src/isz/isz.h \
+ ../src/isz/common/common.h ../src/isz/function/grid.h ../src/isz/it/it.h \
+ ../src/isz/fail/fail.h ../src/isz/function/mprintf.h \
+ ../src/isz/it/grid_line.h ../src/isz/it/list.h ../src/isz/it/node.h \
+ ../src/isz/it/text.h ../src/isz/it/text_canvas.h \
+ ../src/isz/it/grid_field.h ../src/isz/fail/details/no_i.h \
+ ../src/isz/fail/details/errno.h ../src/isz/i/row_cursor.h \
+ ../src/isz/i/grid_line.h ../src/isz/i/size.h ../src/isz/i/str.h \
+ ../src/isz/i/fail_details.h ../src/isz/i/text_canvas.h \
+ ../src/isz/i/keeper.h ../src/isz/i/sequence.h ../src/isz/i/id.h \
+ ../src/isz/i/grid_field.h ../src/isz/i/str_owner.h ../src/isz/i/dump.h
+
+/usr/include/stdc-predef.h:
+
+/usr/include/stdio.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-64.h:
+
+/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stddef.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stdarg.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+/usr/include/malloc.h:
+
+/usr/include/string.h:
+
+/usr/include/xlocale.h:
+
+/usr/include/bits/string.h:
+
+/usr/include/bits/string2.h:
+
+/usr/include/endian.h:
+
+/usr/include/bits/endian.h:
+
+/usr/include/bits/byteswap.h:
+
+/usr/include/bits/byteswap-16.h:
+
+/usr/include/stdlib.h:
+
+/usr/include/bits/wchar.h:
+
+/usr/include/bits/waitflags.h:
+
+/usr/include/bits/waitstatus.h:
+
+/usr/include/sys/types.h:
+
+/usr/include/time.h:
+
+/usr/include/sys/select.h:
+
+/usr/include/bits/select.h:
+
+/usr/include/bits/sigset.h:
+
+/usr/include/bits/time.h:
+
+/usr/include/sys/sysmacros.h:
+
+/usr/include/bits/pthreadtypes.h:
+
+/usr/include/alloca.h:
+
+/usr/include/bits/stdlib-bsearch.h:
+
+/usr/include/bits/stdlib-float.h:
+
+/usr/include/locale.h:
+
+/usr/include/bits/locale.h:
+
+/usr/include/assert.h:
+
+../src/isz/isz.h:
+
+../src/isz/common/common.h:
+
+../src/isz/function/grid.h:
+
+../src/isz/it/it.h:
+
+../src/isz/fail/fail.h:
+
+../src/isz/function/mprintf.h:
+
+../src/isz/it/grid_line.h:
+
+../src/isz/it/list.h:
+
+../src/isz/it/node.h:
+
+../src/isz/it/text.h:
+
+../src/isz/it/text_canvas.h:
+
+../src/isz/it/grid_field.h:
+
+../src/isz/fail/details/no_i.h:
+
+../src/isz/fail/details/errno.h:
+
+../src/isz/i/row_cursor.h:
+
+../src/isz/i/grid_line.h:
+
+../src/isz/i/size.h:
+
+../src/isz/i/str.h:
+
+../src/isz/i/fail_details.h:
+
+../src/isz/i/text_canvas.h:
+
+../src/isz/i/keeper.h:
+
+../src/isz/i/sequence.h:
+
+../src/isz/i/id.h:
+
+../src/isz/i/grid_field.h:
+
+../src/isz/i/str_owner.h:
+
+../src/isz/i/dump.h:

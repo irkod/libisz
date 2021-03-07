@@ -1,0 +1,17 @@
+#ifndef ISZ_PAGE_FIELD_I_H
+#define ISZ_PAGE_FIELD_I_H
+
+#include "isz/common/common.h"
+#include "isz/it/node.h"
+#include "isz/it/it.h"
+
+ISZ_I_ID_DECL(isz_grid_field);
+
+typedef struct isz_grid_field_i_t_
+{
+	void (*set_line)(void *vobj, isz_it_t *line, isz_orientation_t orientation, isz_direction_t direction, ISZ_FAIL_PARAM);
+	isz_it_t *(*get_line)(void *vobj, isz_orientation_t orientation, isz_direction_t direction, ISZ_FAIL_PARAM);
+	isz_node_t *(*get_siblings_node)(void *vobj, isz_orientation_t orientation, isz_direction_t direction, ISZ_FAIL_PARAM);
+} isz_grid_field_i_t;
+
+#endif /* !ISZ_PAGE_FIELD_I_H */

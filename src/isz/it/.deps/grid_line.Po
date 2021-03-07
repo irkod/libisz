@@ -1,0 +1,83 @@
+isz/it/grid_line.o: isz/it/grid_line.c /usr/include/stdc-predef.h \
+ isz/it/grid_line.h isz/common/common.h isz/it/list.h \
+ /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stddef.h \
+ isz/it/node.h isz/it/it.h /usr/include/malloc.h /usr/include/features.h \
+ /usr/include/sys/cdefs.h /usr/include/bits/wordsize.h \
+ /usr/include/gnu/stubs.h /usr/include/gnu/stubs-64.h \
+ /usr/include/stdio.h /usr/include/bits/types.h \
+ /usr/include/bits/typesizes.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/wchar.h \
+ /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stdarg.h \
+ /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
+ /usr/include/bits/stdio.h isz/it/text.h isz/fail/fail.h \
+ /usr/include/assert.h isz/it/grid_field.h isz/i/id.h isz/i/dump.h \
+ isz/i/grid_field.h isz/i/grid_line.h isz/i/str.h isz/i/str_owner.h \
+ isz/i/sequence.h
+
+/usr/include/stdc-predef.h:
+
+isz/it/grid_line.h:
+
+isz/common/common.h:
+
+isz/it/list.h:
+
+/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stddef.h:
+
+isz/it/node.h:
+
+isz/it/it.h:
+
+/usr/include/malloc.h:
+
+/usr/include/features.h:
+
+/usr/include/sys/cdefs.h:
+
+/usr/include/bits/wordsize.h:
+
+/usr/include/gnu/stubs.h:
+
+/usr/include/gnu/stubs-64.h:
+
+/usr/include/stdio.h:
+
+/usr/include/bits/types.h:
+
+/usr/include/bits/typesizes.h:
+
+/usr/include/libio.h:
+
+/usr/include/_G_config.h:
+
+/usr/include/wchar.h:
+
+/usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stdarg.h:
+
+/usr/include/bits/stdio_lim.h:
+
+/usr/include/bits/sys_errlist.h:
+
+/usr/include/bits/stdio.h:
+
+isz/it/text.h:
+
+isz/fail/fail.h:
+
+/usr/include/assert.h:
+
+isz/it/grid_field.h:
+
+isz/i/id.h:
+
+isz/i/dump.h:
+
+isz/i/grid_field.h:
+
+isz/i/grid_line.h:
+
+isz/i/str.h:
+
+isz/i/str_owner.h:
+
+isz/i/sequence.h:

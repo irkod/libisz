@@ -1,0 +1,18 @@
+#ifndef ISZ_I_SEQUENCE_H
+#define ISZ_I_SEQUENCE_H
+
+#include "isz/it/it.h"
+
+ISZ_I_ID_DECL(isz_sequence);
+
+struct isz_it_t_;
+
+typedef struct isz_sequence_i_t_
+{
+	void (*reset)(void *vobj);
+	int (*get)(void *vobj, struct isz_it_t_ **it);
+	void (*next)(void *vobj);
+} isz_sequence_i_t;
+
+
+#endif /* !ISZ_I_SEQUENCE_H */

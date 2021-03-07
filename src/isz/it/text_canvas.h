@@ -1,0 +1,21 @@
+#ifndef ISZ_IT_TEXT_CANVAS_H
+#define ISZ_IT_TEXT_CANVAS_H
+
+#include <stddef.h>
+#include "isz/it/it.h"
+
+typedef struct isz_text_canvas_t_
+{
+	size_t attach_count;
+	size_t row_count;
+	size_t column_count;
+	size_t cursor_row;
+	int mb_cur_max;
+	char *data;
+	ISZ_IT_MEMBER;
+} isz_text_canvas_t;
+
+void isz_text_canvas_init(isz_text_canvas_t *obj);
+void isz_text_canvas_clear(void *vobj);
+ISZ_IT_NEW_DECL(isz_text_canvas);
+#endif /* !ISZ_IT_TEXT_CANVAS_H */

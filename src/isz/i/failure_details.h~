@@ -1,0 +1,15 @@
+#ifndef ISZ_INTERFACE_FAILURE_DETAILS_H
+#define ISZ_INTERFACE_FAILURE_DETAILS_H
+
+#include "../thing/thing.h"
+
+struct isz_fail_node_t_;
+
+extern isz_interface_id_t isz_failure_details_i_id;
+
+typedef struct isz_failure_details_i_t_
+{
+	isz_thing_t *(*dump)(void *vit, struct isz_fail_node_t_ *isz_fail_node);
+} isz_failure_details_i_t;;
+
+#endif /* !ISZ_INTERFACE_FAILURE_DETAILS_H */

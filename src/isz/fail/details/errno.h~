@@ -1,0 +1,15 @@
+#ifndef ISZ_FAIL_DETAILS_ERRNO_H
+#define ISZ_FAIL_DETAILS_ERRNO_H
+
+#include <stddef.h>
+#include "isz/thing/thing.h"
+
+typedef struct isz_fail_details_errno_t_
+{
+	int error;	
+	ISZ_THING;
+} isz_fail_details_errno_t;
+
+void isz_fail_details_errno_init(isz_fail_details_errno_t *it, int error);
+ISZ_THING_NEW_DECL(isz_fail_details_errno);
+#endif /* !ISZ_FAIL_DETAILS_ERRNO_H */

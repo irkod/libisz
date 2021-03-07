@@ -1,0 +1,200 @@
+#ifndef ISZ_THING_THING_H
+#define ISZ_THING_THING_H
+
+#include <malloc.h>
+#include <stddef.h>
+
+typedef const char *isz_i_id_t;
+
+struct isz_fail_node_t_;
+struct isz_thing_t_;
+
+typedef struct isz_thing_i_t_
+{
+	void (*attach)(struct isz_thing_t_ *it, struct isz_fail_node_t_ *isz_fail_node);
+	void (*detach)(struct isz_thing_t_ *it);
+	size_t (*get_attach_count)(struct isz_thing_t_ *vit);
+	void *(*get_i)(struct isz_thing_t_ *it, isz_i_id_t *id, struct isz_fail_node_t_ *isz_fail_node);
+} isz_thing_i_t;
+
+typedef struct isz_thing_t_
+{
+	void *it;
+	isz_thing_i_t *i; 
+	size_t attach_count; 
+} isz_thing_t;
+
+typedef struct isz_i_table_entry_t_
+{
+	isz_i_id_t *id;
+	void *i;
+} isz_i_table_entry_t;
+
+typedef void (*isz_thing_functor_t)(isz_thing_t *it, void *data, struct isz_fail_node_t_ *isz_fail_node);
+
+#define ISZ_THING_MEMBER \
+	isz_thing_t isz_thing
+
+#define ISZ_THING(object) \
+((object)->isz_thing)	
+
+#define ISZ_OBJ(thing) \
+((thing)->it)	
+
+#define ISZ_I_ID_DECL(interface) \
+extern isz_i_id_t interface ## _i_id
+
+#define ISZ_I_ID_DEF(interface) \
+isz_i_id_t interface ## _i_id = #interface
+
+#define ISZ_I_TABLE \
+static isz_i_table_entry_t isz_i_table[] = 
+
+#define ISZ_I_ENTRY(interface) \
+{ &interface ## _i_id, &interface ## _i_value }
+
+#define ISZ_THING_GET_I(thing, interface) \
+(thing)->i->get_i((thing)->it, &interface ## _i_id, ISZ_FAIL); \
+ISZ_FAIL_RET_CALL_IF 
+
+#define ISZ_OBJ_GET_I(object, interface) \
+ISZ_THING_GET_I(&(object)->isz_thing, interface)
+
+#define ISZ_THING_GET_I_VAL(thing, interface, value) \
+(thing)->i->get_i((thing)->it, &interface ## _i_id, ISZ_FAIL); \
+ISZ_FAIL_RET_CALL_IF_VAL(value) 
+
+#define ISZ_OBJ_GET_I_VAL(object, interface, value) \
+ISZ_THING_GET_I_VAL(&(object)->isz_thing, interface, value)
+
+#define ISZ_THING_DETACH(thing) \
+(thing)->i->detach(thing->it)
+
+#define ISZ_OBJ_DETACH(object) \
+(object)->isz_thing.i->detach(&(object)->isz_thing)
+
+#define ISZ_THING_DECL \
+static void isz_thing_attach(isz_thing_t *it, ISZ_FAIL_PAR); \
+static void isz_thing_detach(isz_thing_t *it); \
+static size_t isz_thing_get_attach_count(isz_thing_t *it); \
+static void *isz_thing_get_i(isz_thing_t *it, isz_i_id_t *id, struct isz_fail_node_t_ *isz_fail_node); \
+\
+static isz_thing_i_t isz_thing_value = \
+{ \
+	isz_thing_attach, \
+	isz_thing_detach, \
+	isz_thing_get_attach_count, \
+	isz_thing_get_i \
+}
+
+#define ISZ_THING_ATTACH_DEF(t) \
+void isz_thing_attach(isz_thing_t *it, ISZ_FAIL_PAR) \
+{ \
+	assert(it); \
+\
+	size_t count = it->attach_count + 1; \
+\
+	if(!count) \
+	{ \
+		ISZ_FAIL_SET(isz_attach_count_too_big_failure()); \
+		return; \
+	} \
+\
+	it->attach_count = count; \
+}
+
+#define ISZ_THING_DETACH_DEF(t) \
+void isz_thing_detach(isz_thing_t *it) \
+{ \
+	assert(it); \
+\
+	t ## _t *object = it->it; \
+\
+	assert(it->attach_count); \
+\
+	if(!--it->attach_count) \
+	{ \
+		free(object); \
+	} \
+}
+
+#define ISZ_THING_DETACH_WITH_CLEAR_DEF(t) \
+void isz_thing_detach(isz_thing_t *it) \
+{ \
+	assert(it); \
+\
+	t ## _t *object = it->it; \
+\
+	assert(it->attach_count); \
+\
+	if(!--it->attach_count) \
+	{ \
+		t ## _clear(object); \
+		free(object); \
+	} \
+}
+
+#define ISZ_THING_GET_ATTACH_COUNT_DEF(t) \
+size_t isz_thing_get_attach_count(isz_thing_t *it) \
+{ \
+	assert(it); \
+\
+	return it->attach_count; \
+}
+
+#define ISZ_THING_NEW_DECL(t) \
+t ## _t *t ## _new(struct isz_fail_node_t_ *isz_fail_node)
+
+#define ISZ_THING_GET_IDEF \
+void *isz_thing_get_i(isz_thing_t *it, isz_i_id_t *id, ISZ_FAIL_PAR) \
+{ \
+	size_t i;\
+\
+	for(i = 0; i < sizeof(isz_i_table) / sizeof(isz_i_table_entry_t); i++) \
+		if(isz_i_table[i].id == id) \
+			return isz_i_table[i].i; \
+\
+	ISZ_FAIL_SET(isz_no_i_failure(id)); \
+	return NULL; \
+}
+
+#define ISZ_THING_NEW_DEF(t) \
+t ## _t *t ## _new(ISZ_FAIL_PAR) \
+{ \
+	ISZ_FAIL_NEXT_VAL(NULL); \
+\
+	t ## _t *it = malloc(sizeof(t ## _t)); \
+\
+	if(!it) \
+	{ \
+		ISZ_FAIL_SET(isz_malloc_failure()); \
+		return NULL; \
+	} \
+\
+	it->isz_thing.attach_count = 1; \
+	return it; \
+}
+
+#define ISZ_THING_INIT(it) \
+do \
+{ \
+	it->isz_thing.it = it; \
+	it->isz_thing.i = &isz_thing_value; \
+} while(0);
+#define ISZ_THING_DEF(t) \
+ISZ_THING_ATTACH_DEF(t) \
+ISZ_THING_DETACH_DEF(t) \
+ISZ_THING_GET_ATTACH_COUNT_DEF(t) \
+ISZ_THING_GET_IDEF \
+ISZ_THING_NEW_DEF(t)
+
+#define ISZ_THING_WITH_CLEAR_DEF(t) \
+ISZ_THING_ATTACH_DEF(t) \
+ISZ_THING_DETACH_WITH_CLEAR_DEF(t) \
+ISZ_THING_GET_ATTACH_COUNT_DEF(t) \
+ISZ_THING_GET_IDEF \
+ISZ_THING_NEW_DEF(t)
+
+#endif /* !ISZ_THING_THING_H */
+
+

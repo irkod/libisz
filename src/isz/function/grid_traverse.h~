@@ -1,0 +1,20 @@
+#ifndef ISZ_FUNCTION_GRID_TRAVERSE_H
+#define ISZ_FUNCTION_GRID_TRAVERSE_H
+
+#include "../common/common.h"
+#include "../thing/thing.h"
+#include "../fail/fail.h"
+
+typedef struct isz_grid_traverse_functors_t_
+{
+	isz_thing_functor_t field_functor;
+	void *field_data;
+	isz_thing_functor_t line_functor;
+	void *line_data;
+	isz_thing_functor_t back_line_functor;
+	void *back_line_data;
+} isz_grid_traverse_functors_t;
+
+void isz_page_grid_traverse(isz_thing_t *first_line, isz_thing_t *last_line, isz_direction_t direction, isz_grid_traverse_functors_t *functors, ISZ_FAIL_PAR);
+
+#endif /* !ISZ_FUNCTION_GRID_TRAVERSE_H */

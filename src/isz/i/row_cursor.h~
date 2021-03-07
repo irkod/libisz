@@ -1,0 +1,18 @@
+#ifndef ISZ_INTERFACE_ROW_CURSOR_H
+#define ISZ_INTERFACE_ROW_CURSOR_H
+
+#include <stddef.h>
+#include "fail/fail.h"
+#include "thing/thing.h"
+
+ISZ_INTERFACE_ID_DECLARE(isz_row_cursor);
+
+typedef struct isz_row_cursor_i_t_
+{
+	void (*set)(void *vit, size_t row);
+	size_t (*get)(void *vit);
+	size_t (*move_up)(void *vit);
+	size_t (*move_down)(void *vit);
+} isz_row_cursor_i_t;
+
+#endif /* !ISZ_INTERFACE_ROW_CURSOR_H */

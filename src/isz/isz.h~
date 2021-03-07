@@ -1,0 +1,29 @@
+#ifndef ISZ_H
+#define ISZ_H
+
+#include "isz/common/common.h"
+#include "isz/function/grid.h"
+#include "isz/function/mprintf.h"
+#include "isz/it/grid_line.h"
+#include "isz/it/node.h"
+#include "isz/it/list.h"
+#include "isz/it/it.h"
+#include "isz/it/text_canvas.h"
+#include "isz/it/text.h"
+#include "isz/it/grid_field.h"
+#include "isz/fail/fail.h"
+#include "isz/fail/details/no_i.h"
+#include "isz/fail/details/errno.h"
+#include "isz/i/row_cursor.h"
+#include "isz/i/grid_line.h"
+#include "isz/i/size.h"
+#include "isz/i/str.h"
+#include "isz/i/fail_details.h"
+#include "isz/i/text_canvas.h"
+#include "isz/i/keeper.h"
+#include "isz/i/sequence.h"
+#include "isz/i/id.h"
+#include "isz/i/grid_field.h"
+#include "isz/i/str_owner.h"
+
+#endif /* !ISZ_H */

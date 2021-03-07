@@ -1,0 +1,104 @@
+#include <assert.h>
+#include <stddef.h>
+#include "node.h"
+#include "list.h"
+
+void isz_node_init(isz_node_t *it, isz_thing_t *thing)
+{
+	assert(it);
+	assert(thing);
+
+	it->next = NULL;
+	it->previous = NULL;
+	it->list = NULL;
+	it->thing = thing;
+}
+
+isz_thing_t *isz_node_get_thing(const isz_node_t *it)
+	
+{
+	assert(it);
+	assert(it->thing);
+
+	return it->thing;
+}
+
+void isz_node_append(isz_node_t *it, isz_node_t *next)
+{
+	assert(it);
+	assert(!it->next);
+	assert(it->list);
+	assert(it->list->last == it);
+
+	if(!it->previous)
+	{
+		assert(it->list->first == it);
+	}
+
+	assert(next);
+	assert(!next->previous);
+	assert(!next->list);
+
+	it->next = next;
+	next->previous = it;
+	next->list = it->list;
+
+	it->list->last = next;
+	++it->list->size;
+
+	assert(it->list->size);
+}
+
+isz_thing_t *isz_node_remove(isz_node_t *it)
+{
+	assert(it);
+	assert(it->list);
+
+	if(!it->previous && !it->next)
+	{
+		assert(it->list->size == 1);
+	}
+
+	if(!it->previous)
+	{
+		assert(it->list->first == it);
+		
+		it->list->first = it->next;
+	}
+	else
+		assert(it->list->first != it);
+
+	if(!it->next)	
+	{
+		assert(it->list->last == it);
+		
+		it->list->last = it->previous;
+	}
+	else
+		assert(it->list->last != it);
+
+	if(it->previous)
+	{
+		assert(it->previous->next == it);
+		assert(it->previous->list == it->list);
+		
+		it->previous->next = it->next;
+	}
+
+	if(it->next)
+	{
+		assert(it->next->previous == it);
+		assert(it->next->list == it->list);
+	
+		it->next->previous = it->previous;
+	}
+	
+	it->previous = NULL;
+	it->next = NULL;
+
+	--it->list->size;
+
+	it->list = NULL;
+	return it->thing;
+}
+

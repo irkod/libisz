@@ -1,0 +1,16 @@
+#ifndef ISZ_I_KEEPER_H
+#define ISZ_I_KEEPER_H
+
+#include "isz/it/it.h"
+#include "isz/it/node.h"
+#include "isz/fail/fail.h"
+
+ISZ_I_ID_DECL(isz_keeper);
+
+typedef struct isz_keeper_i_t_
+{
+	void (*add)(void *vobj, isz_node_t *node, ISZ_FAIL_PARAM);
+	void (*clear)(void *vobj);
+} isz_keeper_i_t;
+
+#endif /* !ISZ_I_KEEPER_H */

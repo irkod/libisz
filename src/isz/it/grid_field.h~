@@ -1,0 +1,21 @@
+#ifndef ISZ_IT_GRID_FIELD_H
+#define ISZ_IT_GRID_FIELD_H
+
+#include "isz/common/common.h"
+#include "isz/it/node.h"
+#include "isz/it/it.h"
+#include <stddef.h>
+
+typedef struct isz_grid_field_t_
+{
+	const char *id;
+	isz_it_t *line[isz_orientation_count][isz_direction_count];
+	isz_node_t siblings_node[isz_orientation_count][isz_direction_count];
+	isz_it_t *it;
+	ISZ_IT_MEMBER;
+} isz_grid_field_t;
+
+void isz_grid_field_init(isz_grid_field_t *obj, isz_it_t *it);
+void isz_grid_field_init_id(isz_grid_field_t *obj, isz_it_t *it, const char *id);
+ISZ_IT_NEW_DECL(isz_grid_field);
+#endif /* !ISZ_IT_GRID_FIELD_H */

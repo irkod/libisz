@@ -1,0 +1,4 @@
+
+#include "thing/thing.h"
+
+ISZ_INTERFACE_ID_DEFINE(isz_grid_field);

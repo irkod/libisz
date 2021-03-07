@@ -1,0 +1,262 @@
+#include <stddef.h>
+#include <malloc.h>
+#include <stdio.h>
+#include <assert.h>
+#include "isz/fail/fail.h"
+#include "isz/fail/details/errno.h"
+#include "isz/fail/details/no_i.h"
+#include "isz/i/fail_details.h"
+#include "isz/i/str.h"
+
+const char *isz_program_id = "isz";
+ISZ_FAIL_FILE(isz_program_id);
+
+isz_fail_failure_and_details_t isz_call_failure()
+{
+	static isz_fail_failure_t failure = { "isz_call", "Function failed" };
+	isz_fail_failure_and_details_t fad = { &failure, NULL };
+	return fad;
+}
+
+isz_fail_failure_and_details_t isz_malloc_failure()
+{
+	static isz_fail_failure_t failure = { "isz_malloc", "Out of memory" };
+	isz_fail_failure_and_details_t fad = { &failure, NULL };
+	return fad;
+}
+
+isz_fail_failure_and_details_t isz_errno_failure(int error)
+{
+	static isz_fail_failure_t failure = { "isz_errno", "System function failed" };
+	isz_fail_failure_and_details_t fad = { &failure, NULL };
+
+	ISZ_FAIL_ROOT;
+	ISZ_FAIL_NEXT_VAL(fad);
+
+	isz_fail_details_errno_t *details = isz_fail_details_errno_new(ISZ_FAIL);
+
+	ISZ_FAIL_IF
+	{
+		ISZ_FAIL_ROOT_FREE;
+		return fad;
+	}
+
+	isz_fail_details_errno_init(details, error);
+	fad.details = &details->isz_it;
+	ISZ_FAIL_ROOT_FREE;
+	return fad;
+}
+
+isz_fail_failure_and_details_t isz_attach_count_too_big_failure()
+
+{
+	static isz_fail_failure_t failure = { "isz_attach_count", "Attach count is too big" };
+	isz_fail_failure_and_details_t fad = { &failure, NULL };
+	return fad;
+}
+
+isz_fail_failure_and_details_t isz_mb_failure()
+{
+	static isz_fail_failure_t failure = { "isz_mb", "Multibyte character is broken" };
+	isz_fail_failure_and_details_t fad = { &failure, NULL };
+	return fad;
+}
+
+isz_fail_failure_and_details_t isz_mb_cur_max_failure()
+{
+	static isz_fail_failure_t failure = { "isz_mb_cur_max", "MB_CUR_MAX is not valid" };
+	isz_fail_failure_and_details_t fad = { &failure, NULL };
+	return fad;
+}
+
+isz_fail_failure_and_details_t isz_no_i_failure(isz_i_id_t *id)
+{
+	static isz_fail_failure_t failure = { "isz_no_i", "Interface is missing" };
+	isz_fail_failure_and_details_t fad = { &failure, NULL };
+
+	ISZ_FAIL_ROOT;
+	ISZ_FAIL_NEXT_VAL(fad);
+
+	isz_fail_details_no_i_t *details = isz_fail_details_no_i_new(ISZ_FAIL);
+
+	ISZ_FAIL_IF
+	{
+		ISZ_FAIL_ROOT_FREE;
+		return fad;
+	}
+
+	isz_fail_details_no_i_init(details, id);
+	fad.details = &details->isz_it;
+	ISZ_FAIL_ROOT_FREE;
+	return fad;
+}
+
+void isz_fail_node_init(isz_fail_node_t *obj)
+{
+	assert(obj);
+
+	isz_fail_node_erase(obj);
+	obj->next = NULL;
+}
+
+void isz_fail_node_erase(isz_fail_node_t *obj)
+{
+	assert(obj);
+
+	obj->file = NULL;
+	obj->function_name = NULL;
+	obj->line = 0;
+	obj->failure = NULL;
+	obj->details = NULL;
+}
+
+void isz_fail_set(isz_fail_node_t *obj, isz_fail_file_t *file, const char *function_name, int line, isz_fail_failure_and_details_t fad)
+{
+	assert(obj);
+
+	obj->file = file;
+	obj->function_name = function_name;
+	obj->line = line;
+	obj->failure = fad.failure;
+	obj->details = fad.details;
+
+	fprintf(stderr, "%s.%d\n", function_name, line);
+}
+
+int isz_fail_node_append(isz_fail_node_t *obj)
+{
+	assert(obj);
+	assert(!obj->file);
+	assert(!obj->function_name);
+	assert(!obj->line);
+	assert(!obj->failure);
+	assert(!obj->details);
+	assert(!obj->next);
+
+	obj->next = malloc(sizeof(isz_fail_node_t));
+
+	if(!obj->next)
+	{
+		isz_fail_set(obj, &isz_fail_file, __func__, __LINE__, isz_malloc_failure());
+		return 0;
+	}
+
+	isz_fail_node_init(obj->next);
+	return 1;
+}
+
+void isz_fail_node_clear(isz_fail_node_t *obj)
+{
+	assert(obj);
+
+	if(obj->details)
+		ISZ_IT_DETACH(obj->details);		
+
+	isz_fail_node_erase(obj);
+}
+
+void isz_fail_nodes_clear(isz_fail_node_t *obj)
+{
+	while(obj && obj->file)
+	{
+		isz_fail_node_clear(obj);
+		obj = obj->next;
+	}
+}
+
+void isz_fail_nodes_free(isz_fail_node_t *obj)
+{
+	isz_fail_node_t *next;
+
+	isz_fail_nodes_clear(obj);
+
+	while(obj)
+	{
+		next = obj->next;
+		free(obj);
+		obj = next;
+	}
+}
+
+void isz_fail_nodes_print(isz_fail_node_t *obj, FILE *file)
+{
+	const char *info = 
+		"error\n"
+		"{\n"
+	        " program:%s\n"
+	        " file:%s\n"
+	        " function:%s\n"
+	        " line:%d \n"
+		" id:%s \n"
+		" message:%s\n"
+		"}\n";
+	const char *info_wobjh_details = 
+		"error\n"
+		"{\n"
+	        " program:%s\n"
+	        " file:%s\n"
+	        " function:%s\n"
+	        " line:%d \n"
+		" id:%s \n"
+		" message:%s\n"
+		" details:\n"
+		" {\n"
+		"  %s\n"
+		" }\n"
+		"}\n";
+	isz_it_t *text = NULL;
+	const char *dump = "";
+
+	while(obj && obj->file)
+	{
+		if(obj->details)
+		{
+			isz_fail_node_t isz_fail_node;
+			isz_fail_node_init(&isz_fail_node);
+
+			isz_fail_details_i_t *details_i = ISZ_IT_GET_I(obj->details, isz_fail_details);
+			
+			text = details_i->dump(obj->details->obj, &isz_fail_node);
+
+			if(!isz_fail_node.file)
+			{
+				isz_str_i_t *isz_str_i = ISZ_IT_GET_I(text, isz_str);
+
+				dump = isz_str_i->get(text->obj);
+
+				if(!dump)
+					dump = "";
+			}
+
+			if(isz_fail_node.next)
+				isz_fail_nodes_free(isz_fail_node.next);
+
+			isz_fail_node_clear(&isz_fail_node);
+
+			fprintf(file, info_wobjh_details, 
+					*obj->file->program_id,
+					obj->file->file_name,
+					obj->function_name,
+					obj->line,
+					obj->failure->id,
+					obj->failure->message,
+					dump
+			       );
+
+			if(text)
+				ISZ_IT_DETACH(text);
+		}
+		else
+			fprintf(file, info, 
+					*obj->file->program_id,
+					obj->file->file_name,
+					obj->function_name,
+					obj->line,
+					obj->failure->id,
+					obj->failure->message
+			       );
+
+		obj = obj->next;
+	}
+}
+

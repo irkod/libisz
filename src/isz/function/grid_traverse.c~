@@ -1,0 +1,103 @@
+#include "isz_page_grid_traverse.h"
+#include "../common/common.h"
+#include "../thing/thing.h"
+#include "../interface/grid_field.h"
+#include "../interface/grid_line.h"
+#include "../interface/sequence.h"
+#include "../interface/size.h"
+
+void isz_grid_traverse(isz_thing_t *first_line, isz_thing_t *last_line, isz_direction_t direction, isz_grid_traverse_functors_t *functors, ISZ_FAIL_PAR);
+{
+	ISZ_FAIL_NEXT;
+
+	isz_grid_line_i_t *line_i;
+	isz_grid_line_i_t *next_line_i;
+	isz_grid_field_i_t *field_i;
+	isz_sequence_i_t *sequence_i;
+	isz_size_i_t *sequence_i;
+
+	line_i = first_line->i->get_interface(first_line->it, &isz_grid_line_i_id, ISZ_FAIL);
+	ISZ_FAIL_RETURN_CALL_IF;
+
+	isz_orientation_t orientation = line_i->get_orientation(first_line->it);
+	orientation = ISZ_ORIENTATION_OPPOSITE(orientation);
+
+	isz_thing_t *line = first_line;
+	
+	for(;;)
+	{
+		if(functors->line_functor)
+			functors->line_functor(line, functors->line_data);
+
+		isz_thing_t *line_field_list = line_i->get_fields(line->it, direction);
+
+		sequence_i = line_field_list->i->get_interface(line_field_list->it, &isz_sequence_i_id, ISZ_FAIL);
+		ISZ_FAIL_RETURN_CALL_IF;
+
+		sequence_i->reset(line_field_list->it);
+
+		for(;;)
+		{
+			isz_thing_t *field;
+
+			if(!sequence_i->get(line_field_list->it, &field))
+			{
+				if(functors->back_line_functor)
+					functors->back_line_functor(line, functors->back_line_data);
+
+				isz_thing_t *in_line = line_i->traverse_get_in_line(line->it);
+				line_i->traverse_clear_in_line(line->it);
+				line = in_line;
+
+				if(!line)
+					return;
+
+				line_i = line->i->get_interface(line->it, &isz_grid_line_i_id, ISZ_FAIL);
+				ISZ_FAIL_RETURN_CALL_IF;
+
+				isz_thing_t *line_field_list = line_i->get_fields(line->it, direction);
+				sequence_i = line_field_list->i->get_interface(line_field_list->it, &isz_sequence_i_id, ISZ_FAIL);
+				ISZ_FAIL_RETURN_CALL_IF;
+
+				isz_sequence_i->next(line_field_list.it);
+				continue;
+			}
+
+			if(functors->field_functor)
+				functors->field_functor(field, functors->field_data);
+
+			field_i = field->i->get_interface(field->it, &isz_grid_field_i_id, ISZ_FAIL);
+			ISZ_FAIL_RETURN_CALL_IF;
+
+		        isz_thing_t *next_line = field_i->get_line(field.it, orientation, direction);
+			
+			next_line_i = next_line->i->get_interface(line->it, &isz_grid_line_i_id, ISZ_FAIL);
+			ISZ_FAIL_RETURN_CALL_IF;
+
+			size_t count = next_line_i->traverse_get_in_fields_count(next_line.it);
+			++count;
+
+			assert(count);
+
+			next_line_i->traverse_set_in_fields_count(next_line.it, count);
+
+			isz_thing_t *next_line_field_list = next_line_i->get_fields(next_line->it, ISZ_DIRECTION_OPPOSITE(direction));
+
+			size_i = next_line_field_list->i->get_interface(next_line_field_list->it, &isz_size_i_id, ISZ_FAIL);
+			ISZ_FAIL_RETURN_CALL_IF;
+
+			if(count != size_i->get(next_line_ifield_list.it))
+			{
+				sequence_i->next(line_field_list.it);
+				continue;
+			}
+			else
+			{
+				next_line_i->traverse_set_in_fields_count(next_line.it, 0);
+				next_line_i->traverse_set_in_line(next_line.it, line);
+				line = next_line;
+				break;
+			}
+		}
+	}
+}

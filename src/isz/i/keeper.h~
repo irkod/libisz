@@ -1,0 +1,16 @@
+#ifndef ISZ_INTERFACE_KEEPER_H
+#define ISZ_INTERFACE_KEEPER_H
+
+#include "thing/thing.h"
+#include "thing/node.h"
+#include "fail/fail.h"
+
+ISZ_INTERFACE_ID_DECLARE(isz_keeper);
+
+typedef struct isz_keeper_i_t_
+{
+	void (*add)(void *vit, isz_node_t *node, ISZ_FAIL_PAR);
+	void (*clear)(void *vit);
+} isz_keeper_i_t;
+
+#endif /* !ISZ_INTERFACE_KEEPER_H */

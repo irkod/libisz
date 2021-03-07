@@ -1,0 +1,9 @@
+#ifndef ISZ_MPRINTF_H
+#define ISZ_MPRINTF_H
+
+#include <stdarg.h>
+
+char *isz_mprintf(const char *format, ...);
+char *isz_vmprintf(const char *format, va_list ap_0, va_list ap_1);
+
+#endif /* !ISZ_MPRINTF_H */

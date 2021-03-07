@@ -1,0 +1,13 @@
+#ifndef ISZ_INTERFACE_STR_H
+#define ISZ_INTERFACE_STR_H
+
+#include "isz/thing/thing.h"
+
+extern isz_interface_id_t isz_str_i_id;
+
+typedef struct isz_str_i_t_
+{
+	char *(*get)(void *vit);
+} isz_str_i_t;
+
+#endif /* !ISZ_STR_I_H */
