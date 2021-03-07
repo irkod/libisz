@@ -3,6 +3,7 @@
 
 #include "isz/common/common.h"
 #include "isz/it/list.h"
+#include "isz/it/text.h"
 #include "isz/fail/fail.h"
 #include "isz/it/it.h"
 #include <stddef.h>

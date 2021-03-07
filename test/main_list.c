@@ -93,7 +93,7 @@ void dump3(isz_it_t *t, ISZ_FAIL_PARAM)
 
 	isz_it_t *it;
 
-	while(sequence_i->get(t->obj, &it))
+	while(sequence_i->peek(t->obj, &it))
 	{
 		isz_str_i_t *str_i = ISZ_IT_GET_I(it, isz_str);
 		printf("%s\n", str_i->get(it->obj));

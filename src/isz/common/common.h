@@ -34,6 +34,6 @@ typedef enum isz_side_t_
 	isz_all_right = isz_up_right + isz_right + isz_down_right,
 	isz_all_down = isz_down_right + isz_down + isz_down_left,
 	isz_all_left = isz_down_left + isz_left + isz_up_left,
-	isz_side_all = 255 
+	isz_side_all = isz_up_left + isz_up + isz_up_right + isz_right + isz_down_right + isz_down + isz_down_left + isz_left
 } isz_side_t;
 #endif /* !ISZ_COMMON_COMMON_H */

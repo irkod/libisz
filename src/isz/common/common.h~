@@ -21,7 +21,7 @@ typedef enum isz_direction_t_
 
 typedef enum isz_side_t_
 {
-	isz_none = 0,
+	isz_side_none = 0,
 	isz_up_left = 1,
 	isz_up = 2,
 	isz_up_right = 4,
@@ -34,6 +34,6 @@ typedef enum isz_side_t_
 	isz_all_right = isz_up_right + isz_right + isz_down_right,
 	isz_all_down = isz_down_right + isz_down + isz_down_left,
 	isz_all_left = isz_down_left + isz_left + isz_up_left,
-	isz_all_sides = 255 
+	isz_side_all = isz_up_left + isz_up + isz_up_right + isz_right + isz_down_right + isz_down + isz_down_left + isz_left;
 } isz_side_t;
 #endif /* !ISZ_COMMON_COMMON_H */

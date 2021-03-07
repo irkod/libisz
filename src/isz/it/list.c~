@@ -164,6 +164,6 @@ void isz_keeper_i_clear(void *vobj)
 		
 		assert(it);
 
-		it->i->detach(it);
+		ISZ_IT_DETACH(it);
 	}
 }

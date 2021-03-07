@@ -98,12 +98,10 @@ isz_grid_line_t *line_new(isz_orientation_t o, char *s, ISZ_FAIL_PARAM)
 	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
 	isz_grid_line_init(line, o);
-	isz_id_i_t *isz_id_i = ISZ_OBJ_GET_I(line, isz_id);
-	isz_it_t *id = isz_id_i->get(line, ISZ_FAIL);
+	isz_id_i_t *id_i = ISZ_OBJ_GET_I(line, isz_id);
+	id_i->set(line, s, ISZ_FAIL);
 	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
-	isz_str_owner_i_t *isz_str_owner_i = ISZ_IT_GET_I(id, isz_str_owner);
-	isz_str_owner_i->look(ISZ_OBJ(id), s);
 	return line;
 }
 isz_grid_field_t *field_new(char *s, ISZ_FAIL_PARAM)
@@ -114,12 +112,10 @@ isz_grid_field_t *field_new(char *s, ISZ_FAIL_PARAM)
 	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
 	isz_grid_field_init(field);
-	isz_id_i_t *isz_id_i = ISZ_OBJ_GET_I(field, isz_id);
-	isz_it_t *id = isz_id_i->get(field, ISZ_FAIL);
+	isz_id_i_t *id_i = ISZ_OBJ_GET_I(field, isz_id);
+	id_i->set(field, s, ISZ_FAIL);
 	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
-	isz_str_owner_i_t *isz_str_owner_i = ISZ_IT_GET_I(id, isz_str_owner);
-	isz_str_owner_i->look(ISZ_OBJ(id), s);
 	return field;
 }
 
@@ -133,6 +129,7 @@ void dump(isz_it_t *it, ISZ_FAIL_PARAM)
 
 	isz_str_i_t *isz_str_i = ISZ_IT_GET_I(dump, isz_str);
 	printf("%s\n", isz_str_i->get(ISZ_OBJ(dump)));
+	ISZ_IT_DETACH(dump);
 
 }
 int main()
@@ -198,12 +195,27 @@ int main()
 	dump(ISZ_IT(l_h2), ISZ_FAIL);
 	dump(ISZ_IT(l_h3), ISZ_FAIL);
 	dump(ISZ_IT(l_d), ISZ_FAIL);
-	dump(ISZ_IT(f_f), ISZ_FAIL);
 	
 	dump(ISZ_IT(l_l), ISZ_FAIL);
 	dump(ISZ_IT(l_v1), ISZ_FAIL);
 	dump(ISZ_IT(l_v2), ISZ_FAIL);
 	dump(ISZ_IT(l_r), ISZ_FAIL);
+
+	ISZ_OBJ_DETACH(l_u);
+	ISZ_OBJ_DETACH(l_h1);
+	ISZ_OBJ_DETACH(l_h2);
+	ISZ_OBJ_DETACH(l_h3);
+	ISZ_OBJ_DETACH(l_d);
+	ISZ_OBJ_DETACH(l_l);
+	ISZ_OBJ_DETACH(l_v1);
+	ISZ_OBJ_DETACH(l_v2);
+	ISZ_OBJ_DETACH(l_r);
+	ISZ_OBJ_DETACH(f_a);
+	ISZ_OBJ_DETACH(f_b);
+	ISZ_OBJ_DETACH(f_c);
+	ISZ_OBJ_DETACH(f_d);
+	ISZ_OBJ_DETACH(f_e);
+	ISZ_OBJ_DETACH(f_f);
 	ISZ_FAIL_PRINT(stdout);
 	
 	ISZ_FAIL_ROOT_FREE;

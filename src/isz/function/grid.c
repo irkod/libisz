@@ -78,7 +78,7 @@ void isz_grid_traverse(isz_it_t *first_line, isz_it_t *last_line, isz_direction_
 			isz_it_t *field;
 			isz_grid_field_i_t *field_i;
 
-			if(!list_sequence_i->get(list->obj, &field))
+			if(!list_sequence_i->peek(list->obj, &field))
 			{
 				if(functors->back_line_functor)
 				{

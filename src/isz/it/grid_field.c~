@@ -8,11 +8,13 @@
 #include "isz/i/id.h"
 #include "isz/i/dump.h"
 #include "isz/i/str.h"
+#include "isz/i/str_owner.h"
 #include "isz/i/grid_field.h"
 
 ISZ_FAIL_FILE(isz_program_id);
 
-static isz_it_t *isz_id_i_get(void *vobj, ISZ_FAIL_PARAM);
+static void isz_id_i_set(void *vobj, const char *id, ISZ_FAIL_PARAM);
+static const char *isz_id_i_get(void *vobj);
 static isz_it_t *isz_dump_i_get(void *vobj, ISZ_FAIL_PARAM);
 static void isz_grid_field_i_set_line(void *vobj, isz_it_t *line, isz_orientation_t orientation, isz_direction_t direction, ISZ_FAIL_PARAM);
 static isz_it_t *isz_grid_field_i_get_line(void *vobj, isz_orientation_t orientation, isz_direction_t direction, ISZ_FAIL_PARAM);
@@ -22,6 +24,7 @@ static isz_it_t *isz_grid_field_i_get_it(void *vobj, ISZ_FAIL_PARAM);
 
 static isz_id_i_t isz_id_i_value =
 {
+	isz_id_i_set,
 	isz_id_i_get
 };
 
@@ -64,18 +67,25 @@ void isz_grid_field_init(isz_grid_field_t *obj)
 		}
 }
 
-isz_it_t *isz_id_i_get(void *vobj, ISZ_FAIL_PARAM)
+void isz_id_i_set(void *vobj, const char *id, ISZ_FAIL_PARAM)
 {
-	ISZ_FAIL_NEXT_VAL(NULL);
+	ISZ_FAIL_NEXT;
 
+	assert(vobj);
+	assert(id);
+
+	isz_grid_field_t *obj = vobj;
+	isz_str_owner_i_t *str_owner_i = ISZ_OBJ_GET_I(&obj->id, isz_str_owner);
+	str_owner_i->copy(&obj->id, id, ISZ_FAIL);
+	ISZ_FAIL_RET_CALL_IF;
+}
+const char *isz_id_i_get(void *vobj)
+{
 	assert(vobj);
 	
 	isz_grid_field_t *obj = vobj;
-
-	ISZ_OBJ_ATTACH(&obj->id, ISZ_FAIL);
-	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
-
-	return ISZ_IT(&obj->id);
+	isz_str_i_t *str_i = ISZ_OBJ_GET_I(&obj->id, isz_str);
+	return str_i->get(&obj->id);
 }
 
 isz_it_t *isz_dump_i_get(void *vobj, ISZ_FAIL_PARAM)
@@ -89,22 +99,19 @@ isz_it_t *isz_dump_i_get(void *vobj, ISZ_FAIL_PARAM)
 	isz_text_t *text = isz_text_new(ISZ_FAIL);
 	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
-	isz_str_i_t *isz_str_i;
+	isz_str_i_t *str_i;
 
-	char *line_id[isz_orientation_count][isz_direction_count];
+	const char *line_id[isz_orientation_count][isz_direction_count];
+
 	for(int o = 0; o < isz_orientation_count; ++o)
 		for(int d = 0; d < isz_direction_count; ++d)
 		{
-			isz_id_i_t *isz_id_i = ISZ_IT_GET_I(obj->line[o][d], isz_id);
-			isz_it_t *id = isz_id_i->get(obj->line[o][d], ISZ_FAIL);
-			ISZ_FAIL_RET_CALL_IF_VAL(NULL);
-			
-			isz_str_i = ISZ_IT_GET_I(id, isz_str);
-			line_id[o][d] = isz_str_i->get(ISZ_OBJ(id));
+			isz_it_t *line = obj->line[o][d];
+			isz_id_i_t *id_i = ISZ_IT_GET_I(line, isz_id);
+			line_id[o][d] = id_i->get(ISZ_OBJ(line));
 		}
 
-	isz_str_i = ISZ_OBJ_GET_I(&obj->id, isz_str);
-	char *id = isz_str_i->get(&obj->id);
+	const char *id = isz_id_i_get(obj);
 	
 	isz_text_init_mprintf(text, ISZ_FAIL, 
 		"isz_grid_field{id=%s left=%s up=%s down=%s right=%s}",

@@ -10,7 +10,7 @@
 ISZ_FAIL_FILE(isz_program_id);
 
 static void isz_sequence_i_reset(void *vobj);
-static int isz_sequence_i_get(void *vobj, isz_it_t **it);
+static int isz_sequence_i_peek(void *vobj, isz_it_t **it);
 static void isz_sequence_i_next(void *vobj);
 static size_t isz_size_i_get(void *vobj);
 static void isz_keeper_i_add(void *vobj, isz_node_t *node, ISZ_FAIL_PARAM);
@@ -19,7 +19,7 @@ static void isz_keeper_i_clear(void *vobj);
 static isz_sequence_i_t isz_sequence_i_value =
 {
 	isz_sequence_i_reset,
-	isz_sequence_i_get,
+	isz_sequence_i_peek,
 	isz_sequence_i_next
 };
 
@@ -103,7 +103,7 @@ void isz_sequence_i_reset(void *vobj)
 	obj->sequence = obj->first;
 }
 
-int isz_sequence_i_get(void *vobj, isz_it_t **it)
+int isz_sequence_i_peek(void *vobj, isz_it_t **it)
 {
 	assert(vobj);
 	

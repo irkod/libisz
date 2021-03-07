@@ -14,7 +14,8 @@
 
 ISZ_FAIL_FILE(isz_program_id);
 
-static isz_it_t *isz_id_i_get(void *vobj, ISZ_FAIL_PARAM);
+static void isz_id_i_set(void *vobj, const char *id, ISZ_FAIL_PARAM);
+static const char *isz_id_i_get(void *vobj);
 static isz_it_t *isz_dump_i_get(void *vobj, ISZ_FAIL_PARAM);
 static isz_orientation_t isz_grid_line_i_get_orientation(void *vobj, ISZ_FAIL_PARAM);
 static void isz_grid_line_i_add_field(void *vobj, isz_it_t *field, isz_direction_t direction, ISZ_FAIL_PARAM);
@@ -29,6 +30,7 @@ static isz_it_t *isz_grid_line_i_get_it(void *vobj, ISZ_FAIL_PARAM);
 
 static isz_id_i_t isz_id_i_value =
 {
+	isz_id_i_set,
 	isz_id_i_get
 };
 
@@ -53,7 +55,7 @@ ISZ_I_TABLE_BEGIN
 	ISZ_I_ENTRY(isz_grid_line)
 	ISZ_I_ENTRY(isz_id)
 	ISZ_I_ENTRY(isz_dump)
-ISZ_I_TABLE_END(isz_grid_line)
+ISZ_I_TABLE_CLEARED_END(isz_grid_line)
 
 ISZ_IT_NEW_DEF(isz_grid_line);
 
@@ -75,17 +77,34 @@ void isz_grid_line_init(isz_grid_line_t *obj, isz_orientation_t orientation)
 	obj->traverse_in_line = NULL;
 }
 
-isz_it_t *isz_id_i_get(void *vobj, ISZ_FAIL_PARAM)
+void isz_grid_line_clear(void *vobj)
 {
-	ISZ_FAIL_NEXT_VAL(NULL);
+	assert(vobj);
+
+	isz_grid_line_t *obj = vobj;
+	isz_text_clear(&obj->id);
+}
+
+void isz_id_i_set(void *vobj, const char *id, ISZ_FAIL_PARAM)
+{
+	ISZ_FAIL_NEXT;
+
+	assert(vobj);
+	assert(id);
+
+	isz_grid_field_t *obj = vobj;
+	isz_str_owner_i_t *str_owner_i = ISZ_OBJ_GET_I(&obj->id, isz_str_owner);
+	str_owner_i->copy(&obj->id, id, ISZ_FAIL);
+	ISZ_FAIL_RET_CALL_IF;
+}
+
+const char *isz_id_i_get(void *vobj)
+{
 	assert(vobj);
 	
 	isz_grid_field_t *obj = vobj;
-
-	ISZ_OBJ_ATTACH(&obj->id, ISZ_FAIL);
-	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
-
-	return ISZ_IT(&obj->id);
+	isz_str_i_t *str_i = ISZ_OBJ_GET_I(&obj->id, isz_str);
+	return str_i->get(&obj->id);
 }
 
 isz_it_t *isz_dump_i_get(void *vobj, ISZ_FAIL_PARAM)
@@ -99,51 +118,43 @@ isz_it_t *isz_dump_i_get(void *vobj, ISZ_FAIL_PARAM)
 	isz_text_t *text = isz_text_new(ISZ_FAIL);
 	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
-	isz_str_i_t *isz_str_i;
-	
-	isz_str_i = ISZ_OBJ_GET_I(&obj->id, isz_str);
-	char *id = isz_str_i->get(&obj->id);
-	
+	const char *id = isz_id_i_get(obj);	
 	isz_text_init_mprintf(text, ISZ_FAIL, "isz_grid_line{id=%s", id);
-       	isz_str_owner_i_t *isz_str_owner_i = ISZ_OBJ_GET_I(text, isz_str_owner);
+       	isz_str_owner_i_t *str_owner_i = ISZ_OBJ_GET_I(text, isz_str_owner);
 
 	for(int d = 0; d < isz_direction_count; ++d)
 	{
-		isz_str_owner_i->append(text, d == isz_backward ? " backward={" : " forward={", ISZ_FAIL);
+		str_owner_i->append(text, d == isz_backward ? " backward={" : " forward={", ISZ_FAIL);
 		ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
-		isz_sequence_i_t *isz_sequence_i = ISZ_OBJ_GET_I(&obj->fields[d], isz_sequence);
+		isz_list_t *fields = &obj->fields[d];
+		isz_sequence_i_t *sequence_i = ISZ_OBJ_GET_I(fields, isz_sequence);
 		isz_it_t* field;
 
 		int first = 1;
 
-		for(isz_sequence_i->reset(&obj->fields[d]);
-		    isz_sequence_i->get(&obj->fields[d], &field);
-		    isz_sequence_i->next(&obj->fields[d]))
+		for(sequence_i->reset(fields);
+		    sequence_i->peek(fields, &field);
+		    sequence_i->next(fields))
 		{
-			isz_id_i_t *isz_id_i = ISZ_IT_GET_I(field, isz_id);
-			isz_it_t* id = isz_id_i->get(ISZ_OBJ(field), ISZ_FAIL);
-			ISZ_FAIL_RET_CALL_IF_VAL(NULL);
-
-			isz_str_i = ISZ_IT_GET_I(id, isz_str);
-
+			isz_id_i_t *id_i = ISZ_IT_GET_I(field, isz_id);
 			isz_text_t field_text;
-			isz_text_init_mprintf(&field_text, ISZ_FAIL, first ? "%s" :",%s", isz_str_i->get(ISZ_OBJ(id)));
-			ISZ_FAIL_RET_CALL_IF_VAL(NULL);
-			ISZ_IT_DETACH(id);
 
-			isz_str_i = ISZ_OBJ_GET_I(&field_text, isz_str);
-			isz_str_owner_i->append(text, isz_str_i->get(&field_text), ISZ_FAIL);
+			isz_text_init_mprintf(&field_text, ISZ_FAIL, first ? "%s" :",%s", id_i->get(ISZ_OBJ(field)));
+
+			isz_str_i_t *str_i = ISZ_OBJ_GET_I(&field_text, isz_str);
+			str_owner_i->append(text, str_i->get(&field_text), ISZ_FAIL);
 			ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
+			isz_text_clear(&field_text);
 			first = 0;
 		}
 		
-		isz_str_owner_i->append(text, "}", ISZ_FAIL);
+		str_owner_i->append(text, "}", ISZ_FAIL);
 		ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 	}
 
-	isz_str_owner_i->append(text, "}", ISZ_FAIL);
+	str_owner_i->append(text, "}", ISZ_FAIL);
 	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
 	return ISZ_IT(text);

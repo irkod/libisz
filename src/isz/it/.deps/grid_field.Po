@@ -9,7 +9,7 @@ isz/it/grid_field.o: isz/it/grid_field.c /usr/include/stdc-predef.h \
  /usr/lib64/gcc/x86_64-slackware-linux/5.5.0/include/stdarg.h \
  /usr/include/bits/stdio_lim.h /usr/include/bits/sys_errlist.h \
  /usr/include/bits/stdio.h isz/it/text.h isz/fail/fail.h isz/i/id.h \
- isz/i/dump.h isz/i/str.h isz/i/grid_field.h
+ isz/i/dump.h isz/i/str.h isz/i/str_owner.h isz/i/grid_field.h
 
 /usr/include/stdc-predef.h:
 
@@ -66,5 +66,7 @@ isz/i/id.h:
 isz/i/dump.h:
 
 isz/i/str.h:
+
+isz/i/str_owner.h:
 
 isz/i/grid_field.h:

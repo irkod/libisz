@@ -150,8 +150,7 @@ void isz_grid_traverse(isz_it_t *first_line, isz_it_t *last_line, isz_direction_
 				ISZ_FAIL_RET_CALL_IF;
 
 				line = next_line;
-				line_i = ISZ_IT_GET_I(line, isz_grid_line, ISZ_FAIL);
-				ISZ_FAIL_RET_CALL_IF;
+				line_i = ISZ_IT_GET_I(line, isz_grid_line);
 
 				break;
 			}

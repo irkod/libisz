@@ -16,5 +16,7 @@ typedef struct isz_grid_field_t_
 } isz_grid_field_t;
 
 void isz_grid_field_init(isz_grid_field_t *obj);
+void isz_grid_field_clear(void *vobj);
+
 ISZ_IT_NEW_DECL(isz_grid_field);
 #endif /* !ISZ_IT_GRID_FIELD_H */
