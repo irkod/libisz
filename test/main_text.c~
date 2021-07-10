@@ -15,11 +15,11 @@ int main()
 	ISZ_FAIL_ROOT;
 	ISZ_FAIL_NEXT_VAL(0);
 
-	isz_text_t *t = isz_text_new(ISZ_FAIL);
+	struct isz_text *t = isz_text_new(ISZ_FAIL);
 	isz_text_init_mprintf(t, ISZ_FAIL, "Ala ma %d koty %s.\nI %d ma %s też.\n", 3, "syjamskie", 5, "koni");
-	isz_str_i_t *str_i = ISZ_OBJ_GET_I(t, isz_str);
+	isz_str_i_t *str_i = ISZ_OBJECT_GET_INTERFACE(t, isz_str);
 
-	printf(str_i->get(t->it.obj));
+	printf(str_i->get(t));
 
 	ISZ_OBJ_DETACH(t);
 

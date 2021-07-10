@@ -15,7 +15,7 @@ typedef struct isz_grid_traverse_functors_t_
 	void *back_line_data;
 } isz_grid_traverse_functors_t;
 
-void isz_grid_insert(isz_it_t *field, isz_it_t *left, isz_it_t *up, isz_it_t *down, isz_it_t *right, ISZ_FAIL_PARAM);
-void isz_grid_traverse(isz_it_t *first_line, isz_it_t *last_line, isz_direction_t direction, isz_grid_traverse_functors_t *functors, ISZ_FAIL_PARAM);
+void isz_grid_insert(struct isz_it *field, struct isz_it *left, struct isz_it *up, struct isz_it *down, struct isz_it *right, ISZ_FAIL_PARAM);
+void isz_grid_traverse(struct isz_it *first_line, struct isz_it *last_line, enum isz_direction direction, isz_grid_traverse_functors_t *functors, ISZ_FAIL_PARAM);
 
 #endif /* !ISZ_FUNCTION_GRID_TRAVERSE_H */

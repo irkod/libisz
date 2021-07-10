@@ -1,21 +1,21 @@
-#ifndef ISZ_THING_NODE_H
-#define ISZ_THING_NODE_H
+#ifndef ISZ_IT_NODE_H
+#define ISZ_IT_NODE_H
 
-#include "isz/thing/thing.h"
+#include "isz/it/it.h"
 
-struct isz_list_t_;
+struct isz_list;
 
-typedef struct isz_node_t_
+struct isz_node
 {
-	struct isz_node_t_ *next;
-	struct isz_node_t_ *previous;
-	struct isz_list_t_ *list;
-	isz_thing_t *thing;
-} isz_node_t;
+	struct isz_node *next;
+	struct isz_node *previous;
+	struct isz_list_ *list;
+	struct isz_it *it;
+};
 
-void isz_node_init(isz_node_t *it, isz_thing_t *thing);
-isz_thing_t *isz_node_get_thing(const isz_node_t *it);
-void isz_node_append(isz_node_t *it, isz_node_t *next);
-isz_thing_t *isz_node_remove(isz_node_t *it);
+void isz_nodeinit(struct isz_node *obj, struct isz_it *it);
+struct isz_it *isz_nodeget_it(const struct isz_node *obj);
+void isz_nodeappend(struct isz_node *obj, struct isz_node *next);
+struct isz_it *isz_noderemove(struct isz_node *obj);
 
-#endif /* !ISZ_THING_NODE_H */
+#endif /* !ISZ_IT_NODE_H */

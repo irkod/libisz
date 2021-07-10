@@ -16,6 +16,6 @@ typedef struct isz_text_canvas_t_
 } isz_text_canvas_t;
 
 void isz_text_canvas_init(isz_text_canvas_t *obj);
-void isz_text_canvas_clear(isz_text_canvas_t *obj);
-ISZ_IT_NEW_DECL(isz_text_canvas);
+void isz_text_canvas_clear(void *vobj);
+ISZ_IT_NEW_DECLARE(isz_text_canvas);
 #endif /* !ISZ_IT_TEXT_CANVAS_H */

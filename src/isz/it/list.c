@@ -10,37 +10,37 @@
 ISZ_FAIL_FILE(isz_program_id);
 
 static void isz_sequence_i_reset(void *vobj);
-static int isz_sequence_i_peek(void *vobj, isz_it_t **it);
+static int isz_sequence_i_peek(void *vobj, struct isz_it **it);
 static void isz_sequence_i_next(void *vobj);
 static size_t isz_size_i_get(void *vobj);
-static void isz_keeper_i_add(void *vobj, isz_node_t *node, ISZ_FAIL_PARAM);
+static void isz_keeper_i_add(void *vobj, struct isz_node *node, ISZ_FAIL_PARAM);
 static void isz_keeper_i_clear(void *vobj);
 
-static isz_sequence_i_t isz_sequence_i_value =
+static isz_sequence_i_t isz_sequence_interface_value =
 {
 	isz_sequence_i_reset,
 	isz_sequence_i_peek,
 	isz_sequence_i_next
 };
 
-static isz_size_i_t isz_size_i_value =
+static isz_size_i_t isz_size_interface_value =
 {
 	isz_size_i_get
 };
 
-static isz_keeper_i_t isz_keeper_i_value =
+static isz_keeper_i_t isz_keeper_interface_value =
 {
 	isz_keeper_i_add,
 	isz_keeper_i_clear
 };
 
-ISZ_I_TABLE_BEGIN
-	ISZ_I_ENTRY(isz_sequence)
-	ISZ_I_ENTRY(isz_size)
-	ISZ_I_ENTRY(isz_keeper)
-ISZ_I_TABLE_CLEARED_END(isz_list)
+ISZ_IT_INTERFACE_TABLE_BEGIN
+	ISZ_IT_INTERFACE_TABLE_ENTRY(isz_sequence)
+	ISZ_IT_INTERFACE_TABLE_ENTRY(isz_size)
+	ISZ_IT_INTERFACE_TABLE_ENTRY(isz_keeper)
+ISZ_IT_INTERFACE_TABLE_WITH_CLEAR_END(isz_list);
 
-void isz_list_init(isz_list_t *obj)
+void isz_list_init(struct isz_list *obj)
 {
 	assert(obj);
 
@@ -55,13 +55,13 @@ void isz_list_clear(void *vobj)
 {
 	assert(vobj);
 
-	isz_list_t *obj = vobj;
+	struct isz_list *obj = vobj;
 
 	while(obj->first)
-		isz_node_remove(obj->first);
+		isz_noderemove(obj->first);
 }
 
-void isz_list_append(isz_list_t *obj, isz_node_t *node)
+void isz_list_append(struct isz_list *obj, struct isz_node *node)
 {
 	assert(obj);
 	assert(node);
@@ -81,13 +81,13 @@ void isz_list_append(isz_list_t *obj, isz_node_t *node)
 		assert(obj->first);
 		assert(obj->last);
 
-		isz_node_append(obj->last, node);
+		isz_nodeappend(obj->last, node);
 	}
 
 	assert(obj->size);
 }
 
-size_t isz_list_da_get_size(isz_list_t *obj)
+size_t isz_list_da_get_size(struct isz_list *obj)
 {
 	assert(obj);
 
@@ -98,16 +98,16 @@ void isz_sequence_i_reset(void *vobj)
 {
 	assert(vobj);
 
-	isz_list_t *obj = vobj;
+	struct isz_list *obj = vobj;
 	
 	obj->sequence = obj->first;
 }
 
-int isz_sequence_i_peek(void *vobj, isz_it_t **it)
+int isz_sequence_i_peek(void *vobj, struct isz_it **it)
 {
 	assert(vobj);
 	
-	isz_list_t *obj = vobj;
+	struct isz_list *obj = vobj;
 
 	if(!obj->sequence)
 		return 0;
@@ -120,7 +120,7 @@ void isz_sequence_i_next(void *vobj)
 {
 	assert(vobj);
 
-	isz_list_t *obj = vobj;
+	struct isz_list *obj = vobj;
 
 	if(obj->sequence)
 		obj->sequence = obj->sequence->next;
@@ -130,24 +130,24 @@ void isz_sequence_i_next(void *vobj)
 size_t isz_size_i_get(void *vobj)
 {
 	assert(vobj);
-	isz_list_t *obj = vobj;
+	struct isz_list *obj = vobj;
 
 	return obj->size;
 }
 
-void isz_keeper_i_add(void *vobj, isz_node_t *node, ISZ_FAIL_PARAM)
+void isz_keeper_i_add(void *vobj, struct isz_node *node, ISZ_FAIL_PARAM)
 {
 	ISZ_FAIL_NEXT;
 
 	assert(vobj);
 	assert(node);
 
-	isz_it_t *it = isz_node_get_it(node);
+	struct isz_it *it = isz_nodeget_it(node);
 	
 	ISZ_IT_ATTACH(it, ISZ_FAIL);
 	ISZ_FAIL_RET_CALL_IF;
 
-	isz_list_t *obj = vobj;
+	struct isz_list *obj = vobj;
 
 	isz_list_append(obj, node);
 }
@@ -156,11 +156,11 @@ void isz_keeper_i_clear(void *vobj)
 {
 	assert(vobj);
 
-	isz_list_t *obj = vobj;
+	struct isz_list *obj = vobj;
 
 	while(obj->first)
 	{
-		isz_it_t *it = isz_node_remove(obj->first);
+		struct isz_it *it = isz_noderemove(obj->first);
 		
 		assert(it);
 

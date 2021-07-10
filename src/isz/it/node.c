@@ -3,7 +3,7 @@
 #include "isz/it/node.h"
 #include "isz/it/list.h"
 
-void isz_node_init(isz_node_t *obj, isz_it_t *it)
+void isz_nodeinit(struct isz_node *obj, struct isz_it *it)
 {
 	assert(obj);
 	assert(it);
@@ -14,7 +14,7 @@ void isz_node_init(isz_node_t *obj, isz_it_t *it)
 	obj->it = it;
 }
 
-isz_it_t *isz_node_get_it(const isz_node_t *obj)
+struct isz_it *isz_nodeget_it(const struct isz_node *obj)
 	
 {
 	assert(obj);
@@ -23,7 +23,7 @@ isz_it_t *isz_node_get_it(const isz_node_t *obj)
 	return obj->it;
 }
 
-void isz_node_append(isz_node_t *obj, isz_node_t *next)
+void isz_nodeappend(struct isz_node *obj, struct isz_node *next)
 {
 	assert(obj);
 	assert(!obj->next);
@@ -49,7 +49,7 @@ void isz_node_append(isz_node_t *obj, isz_node_t *next)
 	assert(obj->list->size);
 }
 
-isz_it_t *isz_node_remove(isz_node_t *obj)
+struct isz_it *isz_noderemove(struct isz_node *obj)
 {
 	assert(obj);
 	assert(obj->list);

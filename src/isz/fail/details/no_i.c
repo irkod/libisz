@@ -11,20 +11,20 @@
 
 ISZ_FAIL_FILE(isz_program_id);
 
-static isz_it_t *isz_fail_details_i_dump(void *vobj, ISZ_FAIL_PARAM);
+static struct isz_it *isz_fail_details_i_dump(void *vobj, ISZ_FAIL_PARAM);
 
-static isz_fail_details_i_t isz_fail_details_i_value =
+static isz_fail_details_i_t isz_fail_details_interface_value =
 {
 	isz_fail_details_i_dump
 };
 
-ISZ_I_TABLE_BEGIN
-	ISZ_I_ENTRY(isz_fail_details)
-ISZ_I_TABLE_END(isz_fail_details_no_i)
+ISZ_IT_INTERFACE_TABLE_BEGIN
+	ISZ_IT_INTERFACE_TABLE_ENTRY(isz_fail_details)
+ISZ_IT_INTERFACE_TABLE_END(isz_fail_details_no_i);
 
-ISZ_IT_NEW_DEF(isz_fail_details_no_i);
+ISZ_IT_NEW_DEFINE(isz_fail_details_no_i);
 
-void isz_fail_details_no_i_init(isz_fail_details_no_i_t *obj, isz_i_id_t *id)
+void isz_fail_details_no_i_init(struct isz_fail_details_no_i *obj, isz_it_interface_id_t *id)
 {
 	assert(obj);
 
@@ -32,15 +32,15 @@ void isz_fail_details_no_i_init(isz_fail_details_no_i_t *obj, isz_i_id_t *id)
 	obj->id = id;
 }
 
-isz_it_t *isz_fail_details_i_dump(void *vobj, ISZ_FAIL_PARAM)
+struct isz_it *isz_fail_details_i_dump(void *vobj, ISZ_FAIL_PARAM)
 {
 	ISZ_FAIL_NEXT_VAL(NULL);
 
 	assert(vobj);
 
-	isz_fail_details_no_i_t *obj = vobj;
+	struct isz_fail_details_no_i *obj = vobj;
 
-	isz_text_t *text = isz_text_new(ISZ_FAIL);
+	struct isz_text *text = isz_text_new(ISZ_FAIL);
 	ISZ_FAIL_RET_CALL_IF_VAL(NULL);
 
 	isz_text_init_mprintf(text, ISZ_FAIL, "{ interface: %s }", *obj->id);

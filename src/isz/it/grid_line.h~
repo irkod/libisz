@@ -8,19 +8,19 @@
 #include "isz/it/it.h"
 #include <stddef.h>
 
-typedef struct isz_grid_line_t_ isz_grid_line_t;
-
-struct isz_grid_line_t_
+struct isz_grid_line_
 {
 	isz_text_t id;
-	isz_orientation_t orientation;
+	enum isz_orientation orientation;
 	isz_list_t fields[isz_direction_count];
 	size_t traverse_in_fields_count;
-	isz_it_t *traverse_in_line;
+	struct isz_it *traverse_in_line;
 	ISZ_IT_MEMBER;
-} ;
+};
 
-void isz_grid_line_init(isz_grid_line_t *obj, isz_orientation_t orientation);
-ISZ_IT_NEW_DECL(isz_grid_line);
+void isz_grid_line_init(struct isz_grid_line *obj, enum isz_orientation orientation);
+void isz_grid_line_clear(void *vobj);
+
+ISZ_IT_NEW_DECLARE(isz_grid_line);
 
 #endif /* !ISZ_IT_GRID_LINE_H */

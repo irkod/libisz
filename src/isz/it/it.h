@@ -1,118 +1,118 @@
-#ifndef ISZ_IT_THING_H
-#define ISZ_IT_THING_H
+#ifndef ISZ_IT_IT_H
+#define ISZ_IT_IT_H
 
 #include <malloc.h>
 #include <stddef.h>
 
 struct isz_fail_node_t_;
 
-typedef const char *isz_i_id_t;
+typedef const char *isz_it_interface_id_t;
 
-typedef struct isz_i_table_entry_t_
+struct isz_it_interface_table_entry
 {
-	isz_i_id_t *id;
-	void *i;
-} isz_i_table_entry_t;
+	isz_it_interface_id_t *id;
+	void *interface;
+};
 
-typedef struct isz_it_data_t_
+struct isz_it_data
 {
 	const char *type_name;
-	isz_i_table_entry_t *i_table;
-	void (*clear)(void *obj);
-} isz_it_data_t;
+	struct isz_it_interface_table_entry *interface_table;
+	void (*clear)(void *object);
+};
 
-typedef struct isz_it_t_
+struct isz_it
 {
-	void *obj;
-	isz_it_data_t *data; 
+	void *object;
+	struct isz_it_data *data; 
 	size_t attach_count; 
-} isz_it_t;
+};
 
-void isz_it_attach(isz_it_t *it, struct isz_fail_node_t_ *isz_fail_node);
-void isz_it_detach(isz_it_t *it);
-size_t isz_it_get_attach_count(const isz_it_t *it);
-void *isz_it_get_i(isz_it_t *it, isz_i_id_t *id);
+void isz_it_attach(struct isz_it *it, struct isz_fail_node_t_ *isz_fail_node);
+void isz_it_detach(struct isz_it *it);
+size_t isz_it_get_attach_count(const struct isz_it *it);
+void *isz_it_get_interface(struct isz_it *it, isz_it_interface_id_t *id);
 
-typedef void (*isz_it_functor_t)(isz_it_t *it, void *data, struct isz_fail_node_t_ *isz_fail_node);
+typedef void (*isz_it_functor_t)(struct isz_it *it, void *data, struct isz_fail_node_t_ *isz_fail_node);
 
 #define ISZ_IT_MEMBER \
-	isz_it_t isz_it
+struct isz_it isz_it
 
 #define ISZ_IT(object) \
 (&(object)->isz_it)	
 
-#define ISZ_OBJ(it) \
-((it)->obj)	
+#define ISZ_IT_GET_OBJECT(it) \
+((it)->object)	
 
-#define ISZ_I_ID_DECL(interface) \
-extern isz_i_id_t interface ## _i_id
+#define ISZ_IT_INTERFACE_ID_DECLARE(interface) \
+extern isz_it_interface_id_t interface ## _interface_id
 
-#define ISZ_I_ID_DEF(interface) \
-isz_i_id_t interface ## _i_id = #interface
+#define ISZ_IT_INTERFACE_ID_DEFINE(interface) \
+isz_it_interface_id_t interface ## _interface_id = #interface
 
-#define ISZ_I_TABLE_BEGIN \
-static isz_i_table_entry_t isz_i_table[] = \
+#define ISZ_IT_INTERFACE_TABLE_BEGIN \
+static struct isz_it_interface_table_entry isz_interface_table[] = \
 {
 
-#define ISZ_I_ENTRY(interface) \
-{ &interface ## _i_id, &interface ## _i_value },
+#define ISZ_IT_INTERFACE_TABLE_ENTRY(interface) \
+{ &interface ## _interface_id, &interface ## _interface_value },
 
-#define ISZ_I_TABLE_END(type) \
+#define ISZ_IT_INTERFACE_TABLE_END(type) \
 { NULL, NULL } \
 }; \
 \
-static isz_it_data_t isz_it_data_value = { #type, isz_i_table, NULL };
+static struct isz_it_data isz_it_data = { #type, isz_interface_table, NULL }
 
-#define ISZ_I_TABLE_CLEARED_END(type) \
+#define ISZ_IT_INTERFACE_TABLE_WITH_CLEAR_END(type) \
 { NULL, NULL } \
 }; \
 \
-static isz_it_data_t isz_it_data_value = { #type, isz_i_table, type ## _clear };
+static struct isz_it_data isz_it_data = { #type, isz_interface_table, type ## _clear }
 
-#define ISZ_IT_GET_I(it, interface) \
-isz_it_get_i(it, &interface ## _i_id); \
+#define ISZ_IT_GET_INTERFACE(it, interface) \
+isz_it_get_interface((it), &interface ## _interface_id); \
 
-#define ISZ_OBJ_GET_I(object, interface) \
-ISZ_IT_GET_I(&(object)->isz_it, interface)
+#define ISZ_OBJECT_GET_INTERFACE(object, interface) \
+ISZ_IT_GET_INTERFACE(&(object)->isz_it, interface)
 
 #define ISZ_IT_ATTACH(it, fail) \
 isz_it_attach(it, fail)
 
-#define ISZ_OBJ_ATTACH(object, fail) \
+#define ISZ_OBJECT_ATTACH(object, fail) \
 ISZ_IT_ATTACH(&(object)->isz_it, fail)
 
 #define ISZ_IT_DETACH(it) \
 isz_it_detach(it)
 
-#define ISZ_OBJ_DETACH(object) \
+#define ISZ_OBJECT_DETACH(object) \
 ISZ_IT_DETACH(&(object)->isz_it)
 
-#define ISZ_IT_NEW_DECL(t) \
-t ## _t *t ## _new(struct isz_fail_node_t_ *isz_fail_node)
+#define ISZ_IT_NEW_DECLARE(type) \
+struct type *type ## _new(struct isz_fail_node_t_ *isz_fail_node)
 
-#define ISZ_IT_NEW_DEF(t) \
-t ## _t *t ## _new(ISZ_FAIL_PARAM) \
+#define ISZ_IT_NEW_DEFINE(type) \
+struct type *type ## _new(ISZ_FAIL_PARAM) \
 { \
 	ISZ_FAIL_NEXT_VAL(NULL); \
 \
-	t ## _t *obj = malloc(sizeof(t ## _t)); \
+	struct type *object = malloc(sizeof(struct type)); \
 \
-	if(!obj) \
+	if(!object) \
 	{ \
-		ISZ_FAIL_SET(isz_malloc_failure()); \
+		ISZ_FAIL_SET(isz_fail_malloc_failure()); \
 		return NULL; \
 	} \
 \
-	obj->isz_it.attach_count = 1; \
-	return obj; \
+	object->isz_it.attach_count = 1; \
+	return object; \
 }
 
 #define ISZ_IT_INIT(obj) \
 do \
 { \
-	obj->isz_it.obj = obj; \
-	obj->isz_it.data = &isz_it_data_value; \
+	(obj)->isz_it.object = obj; \
+	(obj)->isz_it.data = &isz_it_data; \
 } while(0);
 
 
-#endif /* !ISZ_IT_THING_H */
+#endif /* !ISZ_IT_IT_H */

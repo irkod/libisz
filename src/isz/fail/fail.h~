@@ -1,5 +1,5 @@
-#ifndef ISZ_FAIL_H
-#define ISZ_FAIL_H
+#ifndef ISZ_FAIL_FAIL_H
+#define ISZ_FAIL_FAIL_H
 
 #include <stdio.h>
 #include <assert.h>
@@ -22,7 +22,7 @@ typedef struct isz_fail_failure_t_
 typedef struct isz_fail_failure_and_details_t_
 {
 	isz_fail_failure_t *failure;
-	isz_it_t *details;
+	struct isz_it *details;
 } isz_fail_failure_and_details_t;
 
 typedef struct isz_fail_node_t_ isz_fail_node_t;
@@ -32,7 +32,7 @@ struct isz_fail_node_t_{
 	const char *function_name;
 	int line;
 	isz_fail_failure_t *failure;
-	isz_it_t *details;
+	struct isz_it *details;
 	isz_fail_node_t *next;
 };
 
@@ -111,7 +111,7 @@ do \
 \
 	if(isz_fail_node->next->file) \
 	{ \
-		ISZ_FAIL_SET(isz_call_failure()); \
+		ISZ_FAIL_SET(isz_fail_call_failure()); \
 		return; \
 	} \
 } while(0)
@@ -123,7 +123,7 @@ do \
 \
 	if(isz_fail_node->next->file) \
 	{ \
-		ISZ_FAIL_SET(isz_call_failure()); \
+		ISZ_FAIL_SET(isz_fail_call_failure()); \
 		return (r); \
 	} \
 } while(0)
@@ -135,12 +135,12 @@ isz_fail_nodes_print(isz_fail_node, file)
 #define ISZ_FAIL_CLEAR \
 isz_fail_nodes_clear(isz_fail_node)
 
-isz_fail_failure_and_details_t isz_call_failure();
-isz_fail_failure_and_details_t isz_malloc_failure();
-isz_fail_failure_and_details_t isz_errno_failure(int error);
-isz_fail_failure_and_details_t isz_attach_count_too_big_failure();
-isz_fail_failure_and_details_t isz_mb_failure();
-isz_fail_failure_and_details_t isz_mb_cur_max_failure();
-isz_fail_failure_and_details_t isz_no_i_failure(isz_i_id_t *id);
+isz_fail_failure_and_details_t isz_fail_call_failure();
+isz_fail_failure_and_details_t isz_fail_malloc_failure();
+isz_fail_failure_and_details_t isz_fail_errno_failure(int error);
+isz_fail_failure_and_details_t isz_fail_attach_count_too_big_failure();
+isz_fail_failure_and_details_t isz_fail_mb_failure();
+isz_fail_failure_and_details_t isz_fail_mb_cur_max_failure();
+isz_fail_failure_and_details_t isz_fail_no_interface_failure(isz_it_interface_id_t *id);
 
-#endif /* !ISZ_FAIL_H */
+#endif /* !ISZ_FAIL_FAIL_H */

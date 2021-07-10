@@ -5,7 +5,7 @@
 #include "isz/fail/fail.h"
 #include "isz/it/it.h"
 
-ISZ_I_ID_DECL(isz_text_canvas);
+ISZ_IT_INTERFACE_ID_DECLARE(isz_text_canvas);
 
 typedef struct isz_text_canvas_i_t_
 {

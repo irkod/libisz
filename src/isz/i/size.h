@@ -4,7 +4,7 @@
 #include <stddef.h>
 #include "isz/it/it.h"
 
-ISZ_I_ID_DECL(isz_size);
+ISZ_IT_INTERFACE_ID_DECLARE(isz_size);
 
 typedef struct isz_size_i_t_
 {

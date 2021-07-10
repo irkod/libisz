@@ -11,21 +11,21 @@
 const char *isz_program_id = "isz";
 ISZ_FAIL_FILE(isz_program_id);
 
-isz_fail_failure_and_details_t isz_call_failure()
+isz_fail_failure_and_details_t isz_fail_call_failure()
 {
 	static isz_fail_failure_t failure = { "isz_call", "Function failed" };
 	isz_fail_failure_and_details_t fad = { &failure, NULL };
 	return fad;
 }
 
-isz_fail_failure_and_details_t isz_malloc_failure()
+isz_fail_failure_and_details_t isz_fail_malloc_failure()
 {
 	static isz_fail_failure_t failure = { "isz_malloc", "Out of memory" };
 	isz_fail_failure_and_details_t fad = { &failure, NULL };
 	return fad;
 }
 
-isz_fail_failure_and_details_t isz_errno_failure(int error)
+isz_fail_failure_and_details_t isz_fail_errno_failure(int error)
 {
 	static isz_fail_failure_t failure = { "isz_errno", "System function failed" };
 	isz_fail_failure_and_details_t fad = { &failure, NULL };
@@ -33,7 +33,7 @@ isz_fail_failure_and_details_t isz_errno_failure(int error)
 	ISZ_FAIL_ROOT;
 	ISZ_FAIL_NEXT_VAL(fad);
 
-	isz_fail_details_errno_t *details = isz_fail_details_errno_new(ISZ_FAIL);
+	struct isz_fail_details_errno *details = isz_fail_details_errno_new(ISZ_FAIL);
 
 	ISZ_FAIL_IF
 	{
@@ -47,7 +47,7 @@ isz_fail_failure_and_details_t isz_errno_failure(int error)
 	return fad;
 }
 
-isz_fail_failure_and_details_t isz_attach_count_too_big_failure()
+isz_fail_failure_and_details_t isz_fail_attach_count_too_big_failure()
 
 {
 	static isz_fail_failure_t failure = { "isz_attach_count", "Attach count is too big" };
@@ -55,21 +55,21 @@ isz_fail_failure_and_details_t isz_attach_count_too_big_failure()
 	return fad;
 }
 
-isz_fail_failure_and_details_t isz_mb_failure()
+isz_fail_failure_and_details_t isz_fail_mb_failure()
 {
 	static isz_fail_failure_t failure = { "isz_mb", "Multibyte character is broken" };
 	isz_fail_failure_and_details_t fad = { &failure, NULL };
 	return fad;
 }
 
-isz_fail_failure_and_details_t isz_mb_cur_max_failure()
+isz_fail_failure_and_details_t isz_fail_mb_cur_max_failure()
 {
 	static isz_fail_failure_t failure = { "isz_mb_cur_max", "MB_CUR_MAX is not valid" };
 	isz_fail_failure_and_details_t fad = { &failure, NULL };
 	return fad;
 }
 
-isz_fail_failure_and_details_t isz_no_i_failure(isz_i_id_t *id)
+isz_fail_failure_and_details_t isz_fail_no_i_failure(isz_it_interface_id_t *id)
 {
 	static isz_fail_failure_t failure = { "isz_no_i", "Interface is missing" };
 	isz_fail_failure_and_details_t fad = { &failure, NULL };
@@ -77,7 +77,7 @@ isz_fail_failure_and_details_t isz_no_i_failure(isz_i_id_t *id)
 	ISZ_FAIL_ROOT;
 	ISZ_FAIL_NEXT_VAL(fad);
 
-	isz_fail_details_no_i_t *details = isz_fail_details_no_i_new(ISZ_FAIL);
+	struct isz_fail_details_no_i *details = isz_fail_details_no_i_new(ISZ_FAIL);
 
 	ISZ_FAIL_IF
 	{
@@ -119,8 +119,6 @@ void isz_fail_set(isz_fail_node_t *obj, isz_fail_file_t *file, const char *funct
 	obj->line = line;
 	obj->failure = fad.failure;
 	obj->details = fad.details;
-
-	fprintf(stderr, "%s.%d\n", function_name, line);
 }
 
 int isz_fail_node_append(isz_fail_node_t *obj)
@@ -137,7 +135,7 @@ int isz_fail_node_append(isz_fail_node_t *obj)
 
 	if(!obj->next)
 	{
-		isz_fail_set(obj, &isz_fail_file, __func__, __LINE__, isz_malloc_failure());
+		isz_fail_set(obj, &isz_fail_file, __func__, __LINE__, isz_fail_malloc_failure());
 		return 0;
 	}
 
@@ -204,7 +202,7 @@ void isz_fail_nodes_print(isz_fail_node_t *obj, FILE *file)
 		"  %s\n"
 		" }\n"
 		"}\n";
-	isz_it_t *text = NULL;
+	struct isz_it *text = NULL;
 	const char *dump = "";
 
 	while(obj && obj->file)
@@ -214,15 +212,15 @@ void isz_fail_nodes_print(isz_fail_node_t *obj, FILE *file)
 			isz_fail_node_t isz_fail_node;
 			isz_fail_node_init(&isz_fail_node);
 
-			isz_fail_details_i_t *details_i = ISZ_IT_GET_I(obj->details, isz_fail_details);
+			isz_fail_details_i_t *details_i = ISZ_IT_GET_INTERFACE(obj->details, isz_fail_details);
 			
-			text = details_i->dump(obj->details->obj, &isz_fail_node);
+			text = details_i->dump(ISZ_IT_GET_OBJECT(obj->details), &isz_fail_node);
 
 			if(!isz_fail_node.file)
 			{
-				isz_str_i_t *isz_str_i = ISZ_IT_GET_I(text, isz_str);
+				isz_str_i_t *isz_str_i = ISZ_IT_GET_INTERFACE(text, isz_str);
 
-				dump = isz_str_i->get(text->obj);
+				dump = isz_str_i->get(ISZ_IT_GET_OBJECT(text));
 
 				if(!dump)
 					dump = "";

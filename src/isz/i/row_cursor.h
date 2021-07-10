@@ -5,7 +5,7 @@
 #include "isz/fail/fail.h"
 #include "isz/it/it.h"
 
-ISZ_I_ID_DECL(isz_row_cursor);
+ISZ_IT_INTERFACE_ID_DECLARE(isz_row_cursor);
 
 typedef struct isz_row_cursor_i_t_
 {

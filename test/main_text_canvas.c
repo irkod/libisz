@@ -15,10 +15,10 @@ int main()
 	ISZ_FAIL_NEXT_VAL(0);
 
 	setlocale(LC_ALL, "");
-	isz_text_canvas_t *tc = isz_text_canvas_new(ISZ_FAIL);
+	struct isz_text_canvas *tc = isz_text_canvas_new(ISZ_FAIL);
 	isz_text_canvas_init(tc);
-	isz_text_canvas_i_t *tc_canvas_i = ISZ_OBJ_GET_I(tc, isz_text_canvas);
-	isz_row_cursor_i_t *tc_cursor_i = ISZ_OBJ_GET_I(tc, isz_row_cursor);
+	isz_text_canvas_i_t *tc_canvas_i = ISZ_OBJECT_GET_INTERFACE(tc, isz_text_canvas);
+	isz_row_cursor_i_t *tc_cursor_i = ISZ_OBJECT_GET_INTERFACE(tc, isz_row_cursor);
 
 
 	tc_canvas_i->resize(tc, 20, 20, ISZ_FAIL);
@@ -41,7 +41,7 @@ int main()
 	tc_canvas_i->print(tc, stdout, ISZ_FAIL);
 	tc_canvas_i->resize(tc, 10, 30, ISZ_FAIL);
 	
-	ISZ_OBJ_DETACH(tc);
+	ISZ_OBJECT_DETACH(tc);
 
 	ISZ_FAIL_PRINT(stdout);
 	

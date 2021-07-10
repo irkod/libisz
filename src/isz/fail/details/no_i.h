@@ -4,12 +4,12 @@
 #include <stddef.h>
 #include "isz/it/it.h"
 
-typedef struct isz_fail_details_no_i_t_
+struct isz_fail_details_no_i
 {
-	isz_i_id_t *id;	
+	isz_it_interface_id_t *id;	
 	ISZ_IT_MEMBER;
-} isz_fail_details_no_i_t;
+};
 
-void isz_fail_details_no_i_init(isz_fail_details_no_i_t *obj, isz_i_id_t *id);
-ISZ_IT_NEW_DECL(isz_fail_details_no_i);
+void isz_fail_details_no_i_init(struct isz_fail_details_no_i *obj, isz_it_interface_id_t *id);
+ISZ_IT_NEW_DECLARE(isz_fail_details_no_i);
 #endif /* !ISZ_FAIL_DETAILS_NO_I_H */

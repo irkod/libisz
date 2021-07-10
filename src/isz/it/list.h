@@ -5,19 +5,19 @@
 #include "isz/it/node.h"
 #include "isz/it/it.h"
 
-typedef struct isz_list_t_
+struct isz_list
 {
-	isz_node_t *first;
-	isz_node_t *last;
-	isz_node_t *sequence;
+	struct isz_node *first;
+	struct isz_node *last;
+	struct isz_node *sequence;
 	size_t size;
 	ISZ_IT_MEMBER;
-} isz_list_t;
+};
 
-void isz_list_init(isz_list_t *obj);
-void isz_list_append(isz_list_t *obj, isz_node_t *node);
-size_t isz_list_get_size(isz_list_t *obj);
+void isz_list_init(struct isz_list *obj);
+void isz_list_append(struct isz_list *obj, struct isz_node *node);
+size_t isz_list_get_size(struct isz_list *obj);
 void isz_list_clear(void *vobj);
-ISZ_IT_NEW_DECL(isz_list);
+ISZ_IT_NEW_DECLARE(isz_list);
 
 #endif /* ISZ_IT_LIST_H */

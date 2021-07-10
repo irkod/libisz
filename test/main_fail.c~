@@ -4,14 +4,14 @@
 const char *program_id = "main_fail";
 ISZ_FAIL_FILE(program_id);
 
-void fun_a(ISZ_FAIL_PAR)
+void fun_a(ISZ_FAIL_PARAM)
 {
 	ISZ_FAIL_SET(isz_errno_failure(2));
 	return;
 }
 
 
-void fun_b(ISZ_FAIL_PAR)
+void fun_b(ISZ_FAIL_PARAM)
 {
 	ISZ_FAIL_NEXT;
 
@@ -21,7 +21,7 @@ void fun_b(ISZ_FAIL_PAR)
 	return;
 }
 
-void fun_c(ISZ_FAIL_PAR)
+void fun_c(ISZ_FAIL_PARAM)
 {
 	ISZ_FAIL_NEXT;
 

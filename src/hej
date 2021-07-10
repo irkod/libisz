@@ -1,0 +1,105 @@
+In file included from isz/function/grid.h:6:0,
+                 from isz/function/grid.c:1:
+isz/function/grid.c: In function ‘isz_grid_traverse’:
+./isz/fail/fail.h:52:18: warning: passing argument 3 of ‘functors->line_functor’ from incompatible pointer type [-Wincompatible-pointer-types]
+ #define ISZ_FAIL isz_fail_node->next
+                  ^
+isz/function/grid.c:66:54: note: in expansion of macro ‘ISZ_FAIL’
+    functors->line_functor(line, functors->line_data, ISZ_FAIL);
+                                                      ^
+./isz/fail/fail.h:52:18: note: expected ‘struct isz_fail_node *’ but argument is of type ‘isz_fail_node_t * {aka struct isz_fail_node_t_ *}’
+ #define ISZ_FAIL isz_fail_node->next
+                  ^
+isz/function/grid.c:66:54: note: in expansion of macro ‘ISZ_FAIL’
+    functors->line_functor(line, functors->line_data, ISZ_FAIL);
+                                                      ^
+isz/function/grid.c:70:48: error: ‘struct isz_it’ has no member named ‘obj’
+   struct isz_it *list = line_i->get_fields(line->obj, direction, ISZ_FAIL);
+                                                ^
+isz/function/grid.c:73:39: warning: implicit declaration of function ‘ISZ_IT_GET_I’ [-Wimplicit-function-declaration]
+   isz_sequence_i_t *list_sequence_i = ISZ_IT_GET_I(list, isz_sequence);
+                                       ^
+isz/function/grid.c:73:58: error: ‘isz_sequence’ undeclared (first use in this function)
+   isz_sequence_i_t *list_sequence_i = ISZ_IT_GET_I(list, isz_sequence);
+                                                          ^
+isz/function/grid.c:73:58: note: each undeclared identifier is reported only once for each function it appears in
+isz/function/grid.c:75:30: error: ‘struct isz_it’ has no member named ‘obj’
+   list_sequence_i->reset(list->obj);
+                              ^
+isz/function/grid.c:82:34: error: ‘struct isz_it’ has no member named ‘obj’
+    if(!list_sequence_i->peek(list->obj, &field))
+                                  ^
+In file included from isz/function/grid.h:6:0,
+                 from isz/function/grid.c:1:
+./isz/fail/fail.h:52:18: warning: passing argument 3 of ‘functors->back_line_functor’ from incompatible pointer type [-Wincompatible-pointer-types]
+ #define ISZ_FAIL isz_fail_node->next
+                  ^
+isz/function/grid.c:86:66: note: in expansion of macro ‘ISZ_FAIL’
+      functors->back_line_functor(line, functors->back_line_data, ISZ_FAIL);
+                                                                  ^
+./isz/fail/fail.h:52:18: note: expected ‘struct isz_fail_node *’ but argument is of type ‘isz_fail_node_t * {aka struct isz_fail_node_t_ *}’
+ #define ISZ_FAIL isz_fail_node->next
+                  ^
+isz/function/grid.c:86:66: note: in expansion of macro ‘ISZ_FAIL’
+      functors->back_line_functor(line, functors->back_line_data, ISZ_FAIL);
+                                                                  ^
+isz/function/grid.c:90:63: error: ‘struct isz_it’ has no member named ‘obj’
+     struct isz_it *in_line = line_i->traverse_get_in_line(line->obj, ISZ_FAIL);
+                                                               ^
+isz/function/grid.c:93:40: error: ‘struct isz_it’ has no member named ‘obj’
+     line_i->traverse_clear_in_line(line->obj, ISZ_FAIL);
+                                        ^
+isz/function/grid.c:101:33: error: ‘isz_grid_line’ undeclared (first use in this function)
+     line_i = ISZ_IT_GET_I(line, isz_grid_line);
+                                 ^
+isz/function/grid.c:103:35: error: ‘struct isz_it’ has no member named ‘obj’
+     list = line_i->get_fields(line->obj, direction, ISZ_FAIL);
+                                   ^
+isz/function/grid.c:108:31: error: ‘struct isz_it’ has no member named ‘obj’
+     list_sequence_i->next(list->obj);
+                               ^
+In file included from isz/function/grid.h:6:0,
+                 from isz/function/grid.c:1:
+./isz/fail/fail.h:52:18: warning: passing argument 3 of ‘functors->field_functor’ from incompatible pointer type [-Wincompatible-pointer-types]
+ #define ISZ_FAIL isz_fail_node->next
+                  ^
+isz/function/grid.c:114:58: note: in expansion of macro ‘ISZ_FAIL’
+     functors->field_functor(field, functors->field_data, ISZ_FAIL);
+                                                          ^
+./isz/fail/fail.h:52:18: note: expected ‘struct isz_fail_node *’ but argument is of type ‘isz_fail_node_t * {aka struct isz_fail_node_t_ *}’
+ #define ISZ_FAIL isz_fail_node->next
+                  ^
+isz/function/grid.c:114:58: note: in expansion of macro ‘ISZ_FAIL’
+     functors->field_functor(field, functors->field_data, ISZ_FAIL);
+                                                          ^
+isz/function/grid.c:118:34: error: ‘isz_grid_field’ undeclared (first use in this function)
+    field_i = ISZ_IT_GET_I(field, isz_grid_field);
+                                  ^
+isz/function/grid.c:120:61: error: ‘struct isz_it’ has no member named ‘obj’
+           struct isz_it *next_line = field_i->get_line(field->obj, orientation, direction, ISZ_FAIL);
+                                                             ^
+isz/function/grid.c:125:70: error: ‘struct isz_it’ has no member named ‘obj’
+    size_t count = next_line_i->traverse_get_in_fields_count(next_line->obj, ISZ_FAIL);
+                                                                      ^
+isz/function/grid.c:132:55: error: ‘struct isz_it’ has no member named ‘obj’
+    next_line_i->traverse_set_in_fields_count(next_line->obj, count, ISZ_FAIL);
+                                                       ^
+isz/function/grid.c:135:69: error: ‘struct isz_it’ has no member named ‘obj’
+    struct isz_it *next_line_list = next_line_i->get_fields(next_line->obj, ISZ_DIRECTION_OPPOSITE(direction), ISZ_FAIL);
+                                                                     ^
+isz/function/grid.c:138:71: error: ‘isz_size’ undeclared (first use in this function)
+    isz_size_i_t *next_line_list_size_i = ISZ_IT_GET_I(next_line_list, isz_size);
+                                                                       ^
+isz/function/grid.c:140:57: error: ‘struct isz_it’ has no member named ‘obj’
+    if(count != next_line_list_size_i->get(next_line_list->obj))
+                                                         ^
+isz/function/grid.c:142:31: error: ‘struct isz_it’ has no member named ‘obj’
+     list_sequence_i->next(list->obj);
+                               ^
+isz/function/grid.c:147:56: error: ‘struct isz_it’ has no member named ‘obj’
+     next_line_i->traverse_set_in_fields_count(next_line->obj, 0, ISZ_FAIL);
+                                                        ^
+isz/function/grid.c:150:48: error: ‘struct isz_it’ has no member named ‘obj’
+     next_line_i->traverse_set_in_line(next_line->obj, line, ISZ_FAIL);
+                                                ^
+make: *** [isz/function/grid.o] Błąd 1

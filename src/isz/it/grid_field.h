@@ -7,16 +7,16 @@
 #include "isz/it/text.h"
 #include <stddef.h>
 
-typedef struct isz_grid_field_t_
+struct isz_grid_field
 {
-	isz_text_t id;
-	isz_it_t *line[isz_orientation_count][isz_direction_count];
-	isz_node_t siblings_node[isz_orientation_count][isz_direction_count];
+	struct isz_text id;
+	struct isz_it *line[isz_orientation_count][isz_direction_count];
+	struct isz_node siblings_node[isz_orientation_count][isz_direction_count];
 	ISZ_IT_MEMBER;
-} isz_grid_field_t;
+};
 
-void isz_grid_field_init(isz_grid_field_t *obj);
+void isz_grid_field_init(struct isz_grid_field *obj);
 void isz_grid_field_clear(void *vobj);
 
-ISZ_IT_NEW_DECL(isz_grid_field);
+ISZ_IT_NEW_DECLARE(isz_grid_field);
 #endif /* !ISZ_IT_GRID_FIELD_H */

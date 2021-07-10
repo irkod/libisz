@@ -1,4 +1,4 @@
 
 #include "isz/it/it.h"
 
-ISZ_I_ID_DEF(isz_id);
+ISZ_IT_INTERFACE_ID_DEFINE(isz_id);

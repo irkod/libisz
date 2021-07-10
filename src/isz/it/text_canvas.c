@@ -29,7 +29,7 @@ static size_t isz_row_cursor_i_get(void *vobj);
 static size_t isz_row_cursor_i_move_up(void *vobj);
 static size_t isz_row_cursor_i_move_down(void *vobj);
 
-static isz_text_canvas_i_t isz_text_canvas_i_value =
+static isz_text_canvas_i_t isz_text_canvas_interface_value =
 {
 	isz_text_canvas_i_resize,
 	isz_text_canvas_i_put,
@@ -37,7 +37,7 @@ static isz_text_canvas_i_t isz_text_canvas_i_value =
 	isz_text_canvas_i_print
 };
 
-static isz_row_cursor_i_t isz_row_cursor_i_value =
+static isz_row_cursor_i_t isz_row_cursor_interface_value =
 {
 	isz_row_cursor_i_set,
 	isz_row_cursor_i_get,
@@ -45,14 +45,14 @@ static isz_row_cursor_i_t isz_row_cursor_i_value =
 	isz_row_cursor_i_move_down
 };
 
-ISZ_I_TABLE_BEGIN
-	ISZ_I_ENTRY(isz_text_canvas)
-	ISZ_I_ENTRY(isz_row_cursor)
-ISZ_I_TABLE_CLEARED_END(isz_text_canvas)
+ISZ_IT_INTERFACE_TABLE_BEGIN
+	ISZ_IT_INTERFACE_TABLE_ENTRY(isz_text_canvas)
+	ISZ_IT_INTERFACE_TABLE_ENTRY(isz_row_cursor)
+ISZ_IT_INTERFACE_TABLE_WITH_CLEAR_END(isz_text_canvas);
 
-ISZ_IT_NEW_DEF(isz_text_canvas);
+ISZ_IT_NEW_DEFINE(isz_text_canvas);
 
-void isz_text_canvas_init(isz_text_canvas_t *obj)
+void isz_text_canvas_init(struct isz_text_canvas *obj)
 {
 	assert(obj);
 
@@ -68,7 +68,7 @@ void isz_text_canvas_clear(void *vobj)
 {
 	assert(vobj);
 
-	isz_text_canvas_t *obj = vobj;
+	struct isz_text_canvas *obj = vobj;
 
 	if(obj->row_count > 0)
 	{
@@ -83,7 +83,7 @@ void isz_text_canvas_i_resize(void *vobj, size_t row_count, size_t column_count,
 	assert(row_count <= ISZ_PAGE_DISPLAY_CONSOLE_ROWS_MAX);
 	assert(column_count <= ISZ_PAGE_DISPLAY_CONSOLE_COLUMNS_MAX);
 
-	isz_text_canvas_t *obj = vobj;
+	struct isz_text_canvas *obj = vobj;
 
 	obj->mb_cur_max = MB_CUR_MAX;
 
@@ -96,7 +96,7 @@ void isz_text_canvas_i_resize(void *vobj, size_t row_count, size_t column_count,
 
 		if(!new_data)
 		{
-			ISZ_FAIL_SET(isz_malloc_failure());
+			ISZ_FAIL_SET(isz_fail_malloc_failure());
 			return;
 		}
 	}
@@ -119,7 +119,7 @@ int isz_text_canvas_i_put(void *vobj, size_t row, size_t column, char *mb_char, 
 {
 	assert(vobj);
 	
-	isz_text_canvas_t *obj = vobj;
+	struct isz_text_canvas *obj = vobj;
 	
 	assert(row < obj->row_count);
 	assert(column < obj->column_count);
@@ -141,13 +141,13 @@ int isz_text_canvas_i_put(void *vobj, size_t row, size_t column, char *mb_char, 
 
 		if(size < 0)
 		{
-			ISZ_FAIL_SET(isz_mb_failure());
+			ISZ_FAIL_SET(isz_fail_mb_failure());
 			return 0;
 		}	
 
 		if(size > obj->mb_cur_max)		
 		{
-			ISZ_FAIL_SET(isz_mb_cur_max_failure());
+			ISZ_FAIL_SET(isz_fail_mb_cur_max_failure());
 			return 0;
 		}
 
@@ -182,7 +182,7 @@ void isz_text_canvas_i_print(void *vobj, FILE *file, ISZ_FAIL_PARAM)
 	assert(vobj);
 	assert(file);
 
-	isz_text_canvas_t *obj = vobj;
+	struct isz_text_canvas *obj = vobj;
 	
 	for(int r = 0; r < obj->row_count; r++)
 	{
@@ -197,7 +197,7 @@ void isz_text_canvas_i_print(void *vobj, FILE *file, ISZ_FAIL_PARAM)
 
 				if(size > obj->mb_cur_max)
 				{
-					ISZ_FAIL_SET(isz_mb_cur_max_failure());
+					ISZ_FAIL_SET(isz_fail_mb_cur_max_failure());
 					return; 
 				}
 
@@ -214,7 +214,7 @@ void isz_row_cursor_i_set(void *vobj, size_t row)
 {
 	assert(vobj);
 
-	isz_text_canvas_t *obj = vobj;
+	struct isz_text_canvas *obj = vobj;
 	
 	assert(row < obj->row_count);
 
@@ -228,7 +228,7 @@ size_t isz_row_cursor_i_get(void *vobj)
 {
 	assert(vobj);
 
-	isz_text_canvas_t *obj = vobj;
+	struct isz_text_canvas *obj = vobj;
 
 	return obj->cursor_row;
 }
@@ -237,7 +237,7 @@ size_t isz_row_cursor_i_move_up(void *vobj)
 {
 	assert(vobj);
 
-	isz_text_canvas_t *obj = vobj;
+	struct isz_text_canvas *obj = vobj;
 
 	if(obj->cursor_row > 0)
 		--obj->cursor_row;
@@ -249,7 +249,7 @@ size_t isz_row_cursor_i_move_down(void *vobj)
 {
 	assert(vobj);
 
-	isz_text_canvas_t *obj = vobj;
+	struct isz_text_canvas *obj = vobj;
 
 	if(obj->cursor_row + 1 < obj->row_count )
 		++obj->cursor_row;

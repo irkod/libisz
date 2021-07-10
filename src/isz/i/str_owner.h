@@ -5,7 +5,7 @@
 
 struct isz_fail_node_t_;
 
-extern isz_i_id_t isz_str_owner_i_id;
+ISZ_IT_INTERFACE_ID_DECLARE(isz_str_owner);
 
 typedef struct isz_str_owner_i_t_
 {

@@ -48,12 +48,12 @@ void *isz_it_get_i(struct isz_it *it, isz_it_interface_id_t *id)
 	assert(it);
 	assert(id);
 
-	struct isz_it_interface_table_entry *entry = it->data->interface_table;
+	struct isz_it_interface_table_entry *entry = it->data->i_table;
 
 	while(entry->id)
 	{
 		if(entry->id == id)
-			return entry->interface;
+			return entry->i;
 		++entry;
 	}
 

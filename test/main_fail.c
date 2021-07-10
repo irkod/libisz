@@ -6,7 +6,7 @@ ISZ_FAIL_FILE(program_id);
 
 void fun_a(ISZ_FAIL_PARAM)
 {
-	ISZ_FAIL_SET(isz_errno_failure(2));
+	ISZ_FAIL_SET(isz_fail_errno_failure(2));
 	return;
 }
 

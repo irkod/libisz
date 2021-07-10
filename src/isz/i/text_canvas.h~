@@ -13,7 +13,7 @@ typedef struct isz_text_canvas_i_t_
 		       ISZ_FAIL_PARAM);
 	int (*put)(void *vobj, size_t row, size_t column, char *unicode_char,
 		   ISZ_FAIL_PARAM);
-	int (*put_rectangle)(void *vobj, size_t row, size_t column,
+	void (*put_rectangle)(void *vobj, size_t row, size_t column,
 		             size_t row_count, size_t column_count,
 			     char *unicode_char, ISZ_FAIL_PARAM);
 	void (*print)(void *da, FILE *file, ISZ_FAIL_PARAM);

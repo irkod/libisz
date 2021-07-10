@@ -8,7 +8,7 @@
 
 ISZ_FAIL_FILE(isz_program_id);
 
-void isz_grid_insert(isz_it_t *field, isz_it_t *left, isz_it_t *up, isz_it_t *down, isz_it_t *right, ISZ_FAIL_PARAM)
+void isz_grid_insert(struct isz_it *field, struct isz_it *left, struct isz_it *up, struct isz_it *down, struct isz_it *right, ISZ_FAIL_PARAM)
 {
 	ISZ_FAIL_NEXT;
 
@@ -18,9 +18,9 @@ void isz_grid_insert(isz_it_t *field, isz_it_t *left, isz_it_t *up, isz_it_t *do
 	assert(right);
 	assert(down);
 
-	isz_grid_field_i_t *field_i = ISZ_IT_GET_I(field, isz_grid_field);
+	isz_grid_field_i_t *field_i = ISZ_IT_GET_INTERFACE(field, isz_grid_field);
 
-	isz_it_t *lines[isz_orientation_count][isz_direction_count] = { { left, right }, { up, down }};
+	struct isz_it *lines[isz_orientation_count][isz_direction_count] = { { left, right }, { up, down }};
 	
 	int o;
 	int d;
@@ -28,32 +28,33 @@ void isz_grid_insert(isz_it_t *field, isz_it_t *left, isz_it_t *up, isz_it_t *do
 	for(o = 0; o < isz_orientation_count; o++)
 		for(d = 0; d < isz_direction_count; d++)
 		{
-			isz_it_t *line = lines[o][d];
+			struct isz_it *line = lines[o][d];
 
-			field_i->set_line(field->obj, line, o, d, ISZ_FAIL);
+			field_i->set_line(ISZ_IT_GET_OBJECT(field), line, o, d, ISZ_FAIL);
 			ISZ_FAIL_RET_CALL_IF;
 
-			isz_grid_line_i_t *line_i = ISZ_IT_GET_I(line, isz_grid_line);
+			isz_grid_line_i_t *line_i = ISZ_IT_GET_INTERFACE(line, isz_grid_line);
 
-			line_i->add_field(line->obj, field, ISZ_DIRECTION_OPPOSITE(d), ISZ_FAIL);
+			line_i->add_field(ISZ_IT_GET_OBJECT(line), field, ISZ_DIRECTION_OPPOSITE(d), ISZ_FAIL);
 			ISZ_FAIL_RET_CALL_IF;
 		}
 
 	return;
 }
 
-void isz_grid_traverse(isz_it_t *first_line, isz_it_t *last_line, isz_direction_t direction, isz_grid_traverse_functors_t *functors, ISZ_FAIL_PARAM)
+void isz_grid_traverse(struct isz_it *first_line, struct isz_it *last_line,
+	               enum isz_direction direction, isz_grid_traverse_functors_t *functors, ISZ_FAIL_PARAM)
 {
 	ISZ_FAIL_NEXT;
 
-	isz_it_t *line;
+	struct isz_it *line;
 	isz_grid_line_i_t *line_i;
 
 	line = first_line;
 	
-	line_i = ISZ_IT_GET_I(line, isz_grid_line);
+	line_i = ISZ_IT_GET_INTERFACE(line, isz_grid_line);
 	
-	isz_orientation_t orientation = line_i->get_orientation(line->obj, ISZ_FAIL);	
+	enum isz_orientation orientation = line_i->get_orientation(ISZ_IT_GET_OBJECT(line), ISZ_FAIL);	
 	ISZ_FAIL_RET_CALL_IF;
 	
 	orientation = ISZ_ORIENTATION_OPPOSITE(orientation);
@@ -66,19 +67,19 @@ void isz_grid_traverse(isz_it_t *first_line, isz_it_t *last_line, isz_direction_
 			ISZ_FAIL_RET_CALL_IF;
 		}
 
-		isz_it_t *list = line_i->get_fields(line->obj, direction, ISZ_FAIL);
+		struct isz_it *list = line_i->get_fields(ISZ_IT_GET_OBJECT(line), direction, ISZ_FAIL);
 		ISZ_FAIL_RET_CALL_IF;
 		
-		isz_sequence_i_t *list_sequence_i = ISZ_IT_GET_I(list, isz_sequence);
+		isz_sequence_i_t *list_sequence_i = ISZ_IT_GET_INTERFACE(list, isz_sequence);
 
-		list_sequence_i->reset(list->obj);
+		list_sequence_i->reset(ISZ_IT_GET_OBJECT(list));
 
 		for(;;)
 		{
-			isz_it_t *field;
+			struct isz_it *field;
 			isz_grid_field_i_t *field_i;
 
-			if(!list_sequence_i->peek(list->obj, &field))
+			if(!list_sequence_i->peek(ISZ_IT_GET_OBJECT(list), &field))
 			{
 				if(functors->back_line_functor)
 				{
@@ -86,10 +87,10 @@ void isz_grid_traverse(isz_it_t *first_line, isz_it_t *last_line, isz_direction_
 					ISZ_FAIL_RET_CALL_IF;
 				}
 
-				isz_it_t *in_line = line_i->traverse_get_in_line(line->obj, ISZ_FAIL);
+				struct isz_it *in_line = line_i->traverse_get_in_line(ISZ_IT_GET_OBJECT(line), ISZ_FAIL);
 				ISZ_FAIL_RET_CALL_IF;
 
-				line_i->traverse_clear_in_line(line->obj, ISZ_FAIL);
+				line_i->traverse_clear_in_line(ISZ_IT_GET_OBJECT(line), ISZ_FAIL);
 				ISZ_FAIL_RET_CALL_IF;
 
 				line = in_line;
@@ -97,14 +98,14 @@ void isz_grid_traverse(isz_it_t *first_line, isz_it_t *last_line, isz_direction_
 				if(!line)
 					return;
 
-				line_i = ISZ_IT_GET_I(line, isz_grid_line);
+				line_i = ISZ_IT_GET_INTERFACE(line, isz_grid_line);
 
-				list = line_i->get_fields(line->obj, direction, ISZ_FAIL);
+				list = line_i->get_fields(ISZ_IT_GET_OBJECT(line), direction, ISZ_FAIL);
 				ISZ_FAIL_RET_CALL_IF;
 
-				isz_sequence_i_t *list_sequence_i = ISZ_IT_GET_I(list, isz_sequence);
+				isz_sequence_i_t *list_sequence_i = ISZ_IT_GET_INTERFACE(list, isz_sequence);
 
-				list_sequence_i->next(list->obj);
+				list_sequence_i->next(ISZ_IT_GET_OBJECT(list));
 				continue;
 			}
 	
@@ -114,43 +115,43 @@ void isz_grid_traverse(isz_it_t *first_line, isz_it_t *last_line, isz_direction_
 				ISZ_FAIL_RET_CALL_IF;
 			}
 
-			field_i = ISZ_IT_GET_I(field, isz_grid_field);
+			field_i = ISZ_IT_GET_INTERFACE(field, isz_grid_field);
 
-		        isz_it_t *next_line = field_i->get_line(field->obj, orientation, direction, ISZ_FAIL);
+		        struct isz_it *next_line = field_i->get_line(ISZ_IT_GET_OBJECT(field), orientation, direction, ISZ_FAIL);
 			ISZ_FAIL_RET_CALL_IF;
 
-			isz_grid_line_i_t *next_line_i = ISZ_IT_GET_I(next_line, isz_grid_line);
+			isz_grid_line_i_t *next_line_i = ISZ_IT_GET_INTERFACE(next_line, isz_grid_line);
 
-			size_t count = next_line_i->traverse_get_in_fields_count(next_line->obj, ISZ_FAIL);
+			size_t count = next_line_i->traverse_get_in_fields_count(ISZ_IT_GET_OBJECT(next_line), ISZ_FAIL);
 			ISZ_FAIL_RET_CALL_IF;
 
 			++count;
 
 			assert(count);
 
-			next_line_i->traverse_set_in_fields_count(next_line->obj, count, ISZ_FAIL);
+			next_line_i->traverse_set_in_fields_count(ISZ_IT_GET_OBJECT(next_line), count, ISZ_FAIL);
 			ISZ_FAIL_RET_CALL_IF;
 
-			isz_it_t *next_line_list = next_line_i->get_fields(next_line->obj, ISZ_DIRECTION_OPPOSITE(direction), ISZ_FAIL);
+			struct isz_it *next_line_list = next_line_i->get_fields(ISZ_IT_GET_OBJECT(next_line), ISZ_DIRECTION_OPPOSITE(direction), ISZ_FAIL);
 			ISZ_FAIL_RET_CALL_IF;
 
-			isz_size_i_t *next_line_list_size_i = ISZ_IT_GET_I(next_line_list, isz_size);
+			isz_size_i_t *next_line_list_size_i = ISZ_IT_GET_INTERFACE(next_line_list, isz_size);
 
-			if(count != next_line_list_size_i->get(next_line_list->obj))
+			if(count != next_line_list_size_i->get(ISZ_IT_GET_OBJECT(next_line_list)))
 			{
-				list_sequence_i->next(list->obj);
+				list_sequence_i->next(ISZ_IT_GET_OBJECT(list));
 				continue;
 			}
 			else
 			{
-				next_line_i->traverse_set_in_fields_count(next_line->obj, 0, ISZ_FAIL);
+				next_line_i->traverse_set_in_fields_count(ISZ_IT_GET_OBJECT(next_line), 0, ISZ_FAIL);
 				ISZ_FAIL_RET_CALL_IF;
 				
-				next_line_i->traverse_set_in_line(next_line->obj, line, ISZ_FAIL);
+				next_line_i->traverse_set_in_line(ISZ_IT_GET_OBJECT(next_line), line, ISZ_FAIL);
 				ISZ_FAIL_RET_CALL_IF;
 
 				line = next_line;
-				line_i = ISZ_IT_GET_I(line, isz_grid_line);
+				line_i = ISZ_IT_GET_INTERFACE(line, isz_grid_line);
 
 				break;
 			}

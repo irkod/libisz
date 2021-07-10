@@ -3,7 +3,7 @@
 
 #include "isz/it/it.h"
 
-ISZ_I_ID_DECL(isz_id);
+ISZ_IT_INTERFACE_ID_DECLARE(isz_id);
 
 typedef struct isz_id_i_t_
 {

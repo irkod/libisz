@@ -3,19 +3,19 @@
 
 #include "isz/it/it.h"
 
-struct isz_list_t_;
+struct isz_list;
 
-typedef struct isz_node_t_
+struct isz_node
 {
-	struct isz_node_t_ *next;
-	struct isz_node_t_ *previous;
-	struct isz_list_t_ *list;
-	isz_it_t *it;
-} isz_node_t;
+	struct isz_node *next;
+	struct isz_node *previous;
+	struct isz_list *list;
+	struct isz_it *it;
+};
 
-void isz_node_init(isz_node_t *obj, isz_it_t *it);
-isz_it_t *isz_node_get_it(const isz_node_t *obj);
-void isz_node_append(isz_node_t *obj, isz_node_t *next);
-isz_it_t *isz_node_remove(isz_node_t *obj);
+void isz_nodeinit(struct isz_node *obj, struct isz_it *it);
+struct isz_it *isz_nodeget_it(const struct isz_node *obj);
+void isz_nodeappend(struct isz_node *obj, struct isz_node *next);
+struct isz_it *isz_noderemove(struct isz_node *obj);
 
 #endif /* !ISZ_IT_NODE_H */

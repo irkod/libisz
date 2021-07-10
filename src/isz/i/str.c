@@ -1,3 +1,3 @@
 #include "isz/it/it.h"
 
-ISZ_I_ID_DEF(isz_str);
+ISZ_IT_INTERFACE_ID_DEFINE(isz_str);

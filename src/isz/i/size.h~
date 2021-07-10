@@ -1,14 +1,14 @@
-#ifndef ISZ_INTERFACE_SIZE_H
-#define ISZ_INTERFACE_SIZE_H
+#ifndef ISZ_I_SIZE_H
+#define ISZ_I_SIZE_H
 
 #include <stddef.h>
-#include "thing/thing.h"
+#include "isz/it/it.h"
 
-ISZ_INTERFACE_ID_DECLARE(isz_size);
+ISZ_I_ID_DECL(isz_size);
 
 typedef struct isz_size_i_t_
 {
-	size_t (*get)(void *vit);
+	size_t (*get)(void *vobj);
 } isz_size_i_t;
 
-#endif /* !ISZ_INTERFACE_SIZE_H */
+#endif /* !ISZ_I_SIZE_H */
